@@ -1,0 +1,38 @@
+{% extends 'forms.html' %}
+
+{% block title %} Giriş Yap {% endblock %}
+
+{% block body %}
+
+<!-- Login section start -->
+
+<section class="base" id="base-signup">
+    <div class="base-content">
+        <div class="form">
+            <h3>
+                Alışverişe Başlamak için <br> Giriş Yap
+            </h3>
+            
+            <hr class="first">
+            <form method="POST">
+                {{ form.hidden_tag() }}
+
+                <div class="email"><h4>E-Posta Adresi</h4>{{ form.email }} <hr></div>
+                <div class="password"><h4>Şifre</h4>{{ form.password }} <hr></div>
+
+                <div class="buttons">
+                    <a href="/sign-up"> Kayıt Ol</a>
+                    {{ form.submit() }}
+                    <h3>Veya</h3>
+                    <a href="/login-google"> Google ile Giriş Yap</a>
+                    
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
