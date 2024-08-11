@@ -9,6 +9,7 @@
 
 
     <script src="https://kit.fontawesome.com/e24507d923.js" crossorigin="anonymous"></script>
+    
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.10.5/font/bootstrap-icons.min.css" />
 
     
@@ -16,15 +17,14 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
-    <title>Byte-Blaze | {% block title %} {% endblock %}</title>
+    <title>Garden | {% block title %} {% endblock %}</title>
 </head>
-<body style="background-color: rgb(19, 172, 218);">
+<body style="background-color: rgb(24, 129, 1);">
 
 
     <!-- navbar section -->
     <nav class="navbar navbar-expand-lg" style="background-color: rgb(255, 255, 255);">
       <div class="container-fluid">
-        <img src= "../static/images/icon.png" class="navbar-brand" href="#"  style="color: rgb(0, 81, 255); font-size: 30px; margin-right: -2px;"></a>
         
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -32,22 +32,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/" style="font-family: cursive; font-size: 19px;">Byte-Shopping</a>
+              <a class="nav-link active" aria-current="page" href="/" style="font-family: cursive; font-size: 25px;">Garden</a>
             </li>
 
             <li class="nav-item">
-              <a class="nav-link text-grey" href="#" style="font-size: 17px;">Hakkımızda</a>
+              <a class="nav-link text-grey" href="#" style="font-size: 15px;">Hakkımızda</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-grey" href="#" style="font-size: 15px;">İnstagram Sayfamız</a>
             </li>
 
-            <li class="nav-item">
-              <a class="nav-link text-grey" href="#" style="font-size: 17px;">Bize Ulaş</a>
-            </li>
           </ul>
-
-          <form class="d-flex" role="search" action="/search" style="margin-right: 170px;" method="POST">
-            <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn" type="submit">Ara</button>
-          </form>
         </div>
 
         
@@ -56,47 +51,17 @@
           <li class="nav-item mx-2" id="items">
             
             {% if cart | length < 1 %}
-            <a class="nav-link text-grey" href="/cart"><span class="badge bg-success"></span> Sepetim
+            <a class="nav-link text-grey" style=" margin-left:205px; margin-top:10px;" href="/cart"><span class="badge bg-success"></span> Sepetim
               <i class="fa-solid fa-cart-shopping"></i>
             </a>
             {% else %}
-            <a class="nav-link text-grey" href="/cart"><span class="badge bg-success"></span> Sepetim
+            <a class="nav-link text-grey" style=" margin-left:205px; margin-top:10px;" href="/cart"><span class="badge bg-success"></span> Sepetim
               <i class="bi bi-{{ cart | length }}-square-fill"></i>
             </a>
             
             {% endif %}
             
             
-          </li>
-
-          <li class="nav-item mx-2" id="items">
-            <a class="nav-link text-grey" href="#"><span class="badge bg-success"></span> İstek Listesi
-              <i class="fa-solid fa-heart"></i>
-            </a>
-          </li>
-
-          
-          <li class="nav-item dropdown mx-2">
-            <a class="nav-link dropdown-toggle text-grey" href="#" role="button", id="profileDropdown" 
-            data-bs-toggle="dropdown" aria-hidden="false">
-              Hesabım
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="profileDropdown">
-
-            
-              {% if current_user.is_authenticated %}
-              <li><a class="dropdown-item" href="/profile/{{ current_user.id }}">Profilim <i class="fa-solid fa-user"></i></a></li>
-              <li><a class="dropdown-item" href="/orders">Siparişlerim <i class="fa-solid fa-truck-fast"></i></a></li>
-              <li><a class="dropdown-item" href="/logout">Çıkış Yap <i class="fa-solid fa-right-from-bracket"></i></a></li>
-
-              {% else %}
-              
-              <li><a class="dropdown-item" href="/login">Giriş Yap <i class="fa-solid fa-right-to-bracket"></i></a></li>
-
-              {% endif %}
-
-            </ul>
-
           </li>
 
         </ul>
@@ -121,8 +86,8 @@
     {% endblock %}
 
 
-    <footer class="container-fluid  text-center p-2 mt-5" style="background-color: orange; color: white;">
-      <a href="https://Byte-Blaze.com" style="color: white;">Byte-Blaze</a> | <span>
+    <footer class="container-fluid  text-center p-2 mt-5" style="background-color: rgb(68, 156, 9); color: white;">
+      <a href="https://RestorantUrl.com" style="color: white;">Garden</a> | <span>
         <i class="fa-sharp fa-regular fa-copyright"></i></span> 2024 Tüm hakları saklıdır.
 
     </footer>

@@ -27,7 +27,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     GOOGLE_CLIENT_ID = "1087409452458-8asgv2ur8664id8te1uijrh523turdv4.apps.googleusercontent.com"
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-
     flow = Flow.from_client_secrets_file(
         client_secrets_file=client_secrets_file,
         scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],

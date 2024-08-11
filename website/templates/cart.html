@@ -9,7 +9,7 @@
     <div class="row">
         {% if cart %}
 
-        <h1 class="text-center mb-5" style="color: white;">Alışveriş Sepetim</h1>
+        <h1 class="text-center mb-5" style="color: white;">Sipariş Listesi</h1>
         <div class="col-sm-8">
             <div class="card">
                 <div class="card-body">
@@ -62,15 +62,17 @@
 
                         <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
                             <div style="margin-top: 15px;">
-                                <strong>Toplam</strong><small>(Kargo Dahil)</small>
+                                <strong>Toplam</strong><small>(Servis Dahil)</small>
                             </div>
                             <span><span id="totalamount"><strong>{{ total }} TL</strong></span></span>
     
                         </li>
 
                     </ul>
-
-                    <div class="d-grid"><a href="/place-order" class="btn btn-primary">Siparişi Onayla</div>
+                
+                    <div class="col">
+                        <a href="/place-order" class="remove-cart btn btn-sm btn-secondary mr-3 " >Siparişi Onayla</a>
+                    </div>
 
                 </div>
             </div>
