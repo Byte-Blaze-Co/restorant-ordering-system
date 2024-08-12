@@ -118,8 +118,11 @@ def minus_cart():
 @login_required
 def remove_cart():
     if request.method == 'GET':
+        global cart_item
+        
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
+        db.session.add(cart_item)
         db.session.delete(cart_item)
         db.session.commit()
 
@@ -157,6 +160,7 @@ def place_order():
                 new_order = Order()
                 new_order.quantity = item.quantity
                 new_order.price = item.product.current_price
+                new_order.status = 'Beklemede'
 
                 new_order.product_link = item.product_link
                 new_order.customer_link = item.customer_link
@@ -170,14 +174,13 @@ def place_order():
                 db.session.delete(item)
 
                 db.session.commit()
-            toast = ToastNotifier()
-            toast.show_toast(
-                "Yeni Sipariş Var",
-                current_user.id,
-                duration = 20,
-                icon_path =  "",
-                threaded = True,
-            )
+                from win10toast import ToastNotifier
+                toaster = ToastNotifier()
+                toaster.show_toast("Sipariş Var",
+                                   "Masa 10 sipariş verdi",
+                                   icon_path="custom.ico"
+                                   )
+
 
             flash('Order Placed Successfully')
 
@@ -207,6 +210,42 @@ def search():
                            if current_user.is_authenticated else [])
 
     return render_template('search.html')
+@views.route('/deserts')
+def deserts():
+    items = Product.query.filter_by(desert=True)
+    return render_template('deserts.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
+
+@views.route("/mainmenu")
+def mainmenu():
+    items = Product.query.filter_by(main=True)
+    return render_template('mainmenu.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
+
+@views.route("/sneaks")
+def sneaks():
+    items = Product.query.filter_by(sneak=True)
+    print(items)
+    return render_template('sneaks.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
+
+@views.route("/hotdrinks")
+def hotdrinks():
+    items = Product.query.filter_by(hotdrink=True)
+    return render_template('hotdrinks.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
+
+@views.route("/colddrinks")
+def colddrinks():
+    items = Product.query.filter_by(colddrink=True)
+    return render_template('colddrinks.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
+
+@views.route("/salads")
+def salads():
+    items = Product.query.filter_by(salad=True)
+    return render_template('salads.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
 
 
 

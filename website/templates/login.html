@@ -1,6 +1,6 @@
 {% extends 'forms.html' %}
 
-{% block title %} Giriş Yap {% endblock %}
+{% block title %} Admin Girişi {% endblock %}
 
 {% block body %}
 
@@ -10,7 +10,7 @@
     <div class="base-content">
         <div class="form">
             <h3>
-                Alışverişe Başlamak için <br> Giriş Yap
+                Admin Paneline Erişmek için <br> Giriş Yap
             </h3>
             
             <hr class="first">
@@ -21,10 +21,7 @@
                 <div class="password"><h4>Şifre</h4>{{ form.password }} <hr></div>
 
                 <div class="buttons">
-                    <a href="/sign-up"> Kayıt Ol</a>
                     {{ form.submit() }}
-                    <h3>Veya</h3>
-                    <a href="/login-google"> Google ile Giriş Yap</a>
                     
                 </div>
 

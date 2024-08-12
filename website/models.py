@@ -38,6 +38,13 @@ class Product(db.Model):
     product_picture = db.Column(db.String(1000), nullable=False)
     flash_sale = db.Column(db.Boolean, default=False)
     date_added = db.Column(db.DateTime, default=datetime.utcnow)
+    salad = db.Column(db.Boolean, default=False)
+    main = db.Column(db.Boolean, default=False)
+    colddrink = db.Column(db.Boolean, default=False)
+    hotdrink = db.Column(db.Boolean, default=False)
+    desert = db.Column(db.Boolean, default=False)
+    sneak = db.Column(db.Boolean, default=False)
+    
 
     carts = db.relationship('Cart', backref=db.backref('product', lazy=True))
     orders = db.relationship('Order', backref=db.backref('product', lazy=True))

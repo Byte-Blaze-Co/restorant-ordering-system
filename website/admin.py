@@ -26,6 +26,12 @@ def add_shop_items():
             previous_price = form.previous_price.data
             in_stock = form.in_stock.data
             flash_sale = form.flash_sale.data
+            salad = form.salad.data
+            hotdrink = form.hotdrink.data
+            colddrink = form.colddrink.data
+            main = form.main.data
+            desert = form.desert.data
+            sneak = form.sneak.data
 
             file = form.product_picture.data
 
@@ -41,6 +47,12 @@ def add_shop_items():
             new_shop_item.previous_price = previous_price
             new_shop_item.in_stock = in_stock
             new_shop_item.flash_sale = flash_sale
+            new_shop_item.salad = salad
+            new_shop_item.sneak = sneak
+            new_shop_item.colddrink = colddrink
+            new_shop_item.hotdrink = hotdrink
+            new_shop_item.main = main
+            new_shop_item.desert = desert
 
             new_shop_item.product_picture = file_path
 
@@ -81,6 +93,12 @@ def update_item(item_id):
         form.current_price.render_kw = {'placeholder': item_to_update.current_price}
         form.in_stock.render_kw = {'placeholder': item_to_update.in_stock}
         form.flash_sale.render_kw = {'placeholder': item_to_update.flash_sale}
+        form.sneak.render_kw = {'placeholder': item_to_update.sneak}
+        form.main.render_kw = {'placeholder': item_to_update.main}
+        form.colddrink.render_kw = {'placeholder': item_to_update.colddrink}
+        form.hotdrink.render_kw = {'placeholder': item_to_update.hotdrink}
+        form.desert.render_kw = {'placeholder': item_to_update.desert}
+        form.salad.render_kw = {'placeholder': item_to_update.salad}
 
         if form.validate_on_submit():
             product_name = form.product_name.data
@@ -88,6 +106,12 @@ def update_item(item_id):
             previous_price = form.previous_price.data
             in_stock = form.in_stock.data
             flash_sale = form.flash_sale.data
+            salad = form.salad.data
+            hotdrink = form.hotdrink.data
+            colddrink = form.colddrink.data
+            main = form.main.data
+            desert = form.desert.data
+            sneak = form.sneak.data
 
             file = form.product_picture.data
 
@@ -102,6 +126,12 @@ def update_item(item_id):
                                                                 previous_price=previous_price,
                                                                 in_stock=in_stock,
                                                                 flash_sale=flash_sale,
+                                                                salad=salad,
+                                                                sneak=sneak,
+                                                                desert=desert,
+                                                                main=main,
+                                                                colddrink=colddrink,
+                                                                hotdrink=hotdrink,
                                                                 product_picture=file_path))
 
                 db.session.commit()

@@ -32,15 +32,21 @@ class ShopItemsForm(FlaskForm):
     in_stock = IntegerField('Stok Durumu', validators=[DataRequired(), NumberRange(min=0)])
     product_picture = FileField('Ürün Fotoğrafı', validators=[DataRequired()])
     flash_sale = BooleanField('Hızlı Satış')
+    salad = BooleanField('Salata')
+    main = BooleanField('Ana yemek')
+    desert = BooleanField('Tatlı')
+    hotdrink = BooleanField('Sıcak İçecek')
+    colddrink = BooleanField('soğuk içecekler')
+    sneak = BooleanField('Ara Sıcaklar')
 
     add_product = SubmitField('Ürün Ekle')
     update_product = SubmitField('Güncelle')
 
 
 class OrderForm(FlaskForm):
-    order_status = SelectField('Order Status', choices=[('Pending', 'Pending'), ('Accepted', 'Accepted'),
+    order_status = SelectField('Order Status', choices=[('Beklemede', 'Beklemede'), ('Onaylandı', 'Onaylandı'),
                                                         ('Out for delivery', 'Out for delivery'),
-                                                        ('Delivered', 'Delivered'), ('Canceled', 'Canceled')])
+                                                        ('Servis Edildi', 'Servis Edildi'), ('İptal Edildi', 'İptal Edildi')])
 
     update = SubmitField('Update Status')
 

@@ -9,19 +9,19 @@
     <thead>
         <tr>
 
-            <th scope="col">Order ID</th>
-            <th scope="col">Payment ID</th>
+            <th scope="col">Sipariş numarası</th>
+            <th scope="col">Ödeme Numarası</th>
 
-            <th scope="col">UserName</th>
-            <th scope="col">Customer Email</th>
+            <th scope="col">Masa No</th>
+            <th scope="col">Müşteri mail</th>
 
-            <th scope="col">Product Name</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
+            <th scope="col">Ürünün ismi</th>
+            <th scope="col">Fiyat</th>
+            <th scope="col">Adisyon</th>
 
-            <th scope="col">Picture</th>
-            <th scope="col">Status</th>
-            <th scope="col">Action</th>
+            <th scope="col">Resim</th>
+            <th scope="col">Durum</th>
+            <th scope="col">Aksiyon</th>
 
 
         </tr>
@@ -47,7 +47,10 @@
             <td>{{ order.status}}</td>
 
             <td>
-                <a href="/update-order/{{ order.id }}">Update Status</a>
+                <a href="/update-order/{{ order.id }}">Sipariş Durumunu Güncelle</a>
+            </td>
+            <td>
+                <a href="/remove-order/{{ order.id }}">Siparişi Sil</a>
             </td>
 
 
