@@ -17,7 +17,7 @@ def get_image(filename):
 @admin.route('/add-shop-items', methods=['GET', 'POST'])
 @login_required
 def add_shop_items():
-    if current_user.id == 6:
+    if current_user.id == 1:
         form = ShopItemsForm()
 
         if form.validate_on_submit():
@@ -172,6 +172,40 @@ def order_view():
         return render_template('view_orders.html', orders=orders)
     return render_template('404.html')
 
+
+
+@admin.route('/addnewtable')
+@login_required
+def addnewtable():
+    file = open("tablecount.bin", "rb").read()
+    tablecount = int(file)
+    print(tablecount)
+    new_customer = Customer()
+    new_customer.email = 'masa'+str(tablecount)+'@gmail.com'
+    new_customer.username = 'Masa '+str(tablecount)
+    new_customer.password = 'Masa'+str(tablecount)
+    import qrcode
+    img = qrcode.make('https://localhost/masa'+str(tablecount))
+    type(img)  # qrcode.image.pil.PilImage
+    imgname="masa"+str(tablecount)+".png"
+    img.save(imgname)
+    tablecount= tablecount+1
+    print(tablecount)
+    tablecount=bytes(str(tablecount), encoding="utf-8")
+    with open("tablecount.bin", "wb") as file:
+        file.write(tablecount)
+        print(tablecount)
+    file.close()
+    try:
+        db.session.add(new_customer)
+        db.session.commit()
+        flash('Masa Başarıyla Oluşturuldu!')
+        return redirect('/admin-page')
+    except Exception as e:
+        print(e)
+        flash('Sistemimizde bu bilgilerle uyuşan bir hesap var :(')
+
+    
 
 @admin.route('/update-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required

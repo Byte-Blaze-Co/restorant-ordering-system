@@ -11,6 +11,7 @@
             <th scope="col">Username</th>
             <th scope="col">Email</th>
             <th scope="col">Date Joined</th>
+            <th scope="col">Aksiyon</th>
 
         </tr>
 
@@ -22,6 +23,7 @@
         <td>{{ customer.username }}</td>
         <td>{{ customer.email }}</td>
         <td>{{ customer.date_joined }}</td>
+        <td>{{ customer.delete_customer() }}</td>
         </tr>
         {% endfor %}
     </tbody>
