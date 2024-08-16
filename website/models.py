@@ -10,6 +10,7 @@ class Customer(db.Model, UserMixin):
     username = db.Column(db.String(100))
     password_hash = db.Column(db.String(150))
     date_joined = db.Column(db.DateTime(), default=datetime.utcnow)
+    MasaNo = db.Column(db.Integer)
 
     cart_items = db.relationship('Cart', backref=db.backref('customer', lazy=True))
     orders = db.relationship('Order', backref=db.backref('customer', lazy=True))

@@ -184,10 +184,11 @@ def addnewtable():
     new_customer.email = 'masa'+str(tablecount)+'@gmail.com'
     new_customer.username = 'Masa '+str(tablecount)
     new_customer.password = 'Masa'+str(tablecount)
+    new_customer.MasaNo = tablecount
     import qrcode
-    img = qrcode.make('https://localhost/masa'+str(tablecount))
+    img = qrcode.make('https://192.168.1.101/masa'+str(tablecount))
     type(img)  # qrcode.image.pil.PilImage
-    imgname="masa"+str(tablecount)+".png"
+    imgname="QR Kodlar/masa "+str(tablecount)+".png"
     img.save(imgname)
     tablecount= tablecount+1
     print(tablecount)
@@ -199,11 +200,11 @@ def addnewtable():
     try:
         db.session.add(new_customer)
         db.session.commit()
-        flash('Masa Başarıyla Oluşturuldu!')
+        flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz!')
         return redirect('/admin-page')
     except Exception as e:
         print(e)
-        flash('Sistemimizde bu bilgilerle uyuşan bir hesap var :(')
+        flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
 
     
 

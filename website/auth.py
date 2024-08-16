@@ -86,6 +86,16 @@ def callback():
     login_user(session["name"])
     return redirect('/')
 
+@auth.route('/masa<int:MasaNo>', methods=['GET'])
+def logintable(MasaNo):
+    MasaNo = Customer.query.filter_by(MasaNo=MasaNo).first()
+    print(MasaNo.MasaNo)
+    Number = str(MasaNo.MasaNo)
+    customer = Customer.query.filter_by(email="masa"+Number+"@gmail.com").first()
+    login_user(customer)
+    flash(Number+"Numaralı Masaya Giriş Yapıldı")
+    return redirect("/")
+
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
