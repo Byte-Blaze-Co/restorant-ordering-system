@@ -114,7 +114,7 @@ def minus_cart():
         return jsonify(data)
 
 
-@views.route('removecart')
+@views.route('/removecart')
 @login_required
 def remove_cart():
     if request.method == 'GET':
