@@ -17,7 +17,7 @@ def get_image(filename):
 @admin.route('/add-shop-items', methods=['GET', 'POST'])
 @login_required
 def add_shop_items():
-    if current_user.id == 1:
+    if current_user.id == 6:
         form = ShopItemsForm()
 
         if form.validate_on_submit():
@@ -206,7 +206,15 @@ def addnewtable():
         print(e)
         flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
 
-    
+
+@admin.route('/remove-order/<int:order_id>', methods=['GET', 'POST'])
+@login_required
+def remove_order(order_id):  
+    order = Order.query.get(order_id)
+    db.session.delete(order)  
+    db.session.commit()
+    flash('sipariş başarıyla silindi')
+    return redirect('/view-orders')
 
 @admin.route('/update-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required
@@ -218,15 +226,17 @@ def update_order(order_id):
 
         if form.validate_on_submit():
             status = form.order_status.data
+            payment = form.order_Payment.data
+            order.Payment = payment
             order.status = status
 
             try:
                 db.session.commit()
-                flash(f'Order {order_id} Updated successfully')
+                flash(f'{order_id} Numaralı Sipariş Başarıyla Güncellendi')
                 return redirect('/view-orders')
             except Exception as e:
                 print(e)
-                flash(f'Order {order_id} not updated')
+                flash(f'{order_id} Numaralı Sipariş Güncellenemedi ')
                 return redirect('/view-orders')
 
         return render_template('order_update.html', form=form)

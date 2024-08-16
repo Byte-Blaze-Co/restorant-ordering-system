@@ -57,7 +57,7 @@ class Product(db.Model):
 class Cart(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     quantity = db.Column(db.Integer, nullable=False)
-
+    
     customer_link = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     product_link = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)
 
@@ -72,6 +72,7 @@ class Order(db.Model):
     quantity = db.Column(db.Integer, nullable=False)
     price = db.Column(db.Float, nullable=False)
     status = db.Column(db.String(100), nullable=True)
+    Payment = db.Column(db.String(100), nullable=True)
 
     customer_link = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=True)
     product_link = db.Column(db.Integer, db.ForeignKey('product.id'), nullable=False)

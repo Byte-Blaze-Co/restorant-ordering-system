@@ -47,8 +47,10 @@ class OrderForm(FlaskForm):
     order_status = SelectField('Order Status', choices=[('Beklemede', 'Beklemede'), ('Onaylandı', 'Onaylandı'),
                                                         ('Out for delivery', 'Out for delivery'),
                                                         ('Servis Edildi', 'Servis Edildi'), ('İptal Edildi', 'İptal Edildi')])
+    order_Payment = SelectField('Order Payment', choices=[('Ödeme Yapılmadı', 'Ödeme Yapılmadı'), ('Ödeme Bekleniyor', 'Ödeme Bekleniyor'),
+                                                        ('Ödeme Yapıldı', 'Ödeme Yapıldı')])
 
-    update = SubmitField('Update Status')
+    update = SubmitField('Durumu Güncelle')
 
 
 

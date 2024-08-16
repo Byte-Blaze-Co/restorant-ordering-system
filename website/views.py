@@ -83,7 +83,7 @@ def plus_cart():
         data = {
             'quantity': cart_item.quantity,
             'amount': amount,
-            'total': amount + 200
+            'total': amount + 15
         }
 
         return jsonify(data)
@@ -95,25 +95,48 @@ def minus_cart():
     if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
-        cart_item.quantity = cart_item.quantity - 1
+        if cart_item.quantity >=2:
+                cart_item.quantity = cart_item.quantity - 1
+                db.session.commit()
+
+                cart = Cart.query.filter_by(customer_link=current_user.id).all()
+
+                amount = 0
+
+                for item in cart:
+                   amount += item.product.current_price * item.quantity
+
+                   data = {
+                       'quantity': cart_item.quantity,
+                       'amount': amount,
+                       'total': amount + 15
+                          }
+                   
+                return jsonify(data)
+        else:
+            flash('daha fazla eksiltemezsiniz')
+            return jsonify(data)
+
+
+@views.route('/payment/<int:order_id>', methods=['GET', 'POST'])
+@login_required
+def paymentrequest(order_id):
+    order = Order.query.get(order_id)
+    order.Payment = 'Ödeme İsteği Alındı'
+    try:
         db.session.commit()
-
-        cart = Cart.query.filter_by(customer_link=current_user.id).all()
-
-        amount = 0
-
-        for item in cart:
-            amount += item.product.current_price * item.quantity
-
-        data = {
-            'quantity': cart_item.quantity,
-            'amount': amount,
-            'total': amount + 200
-        }
-
-        return jsonify(data)
-
-
+        from win10toast import ToastNotifier
+        toaster = ToastNotifier()
+        toaster.show_toast("Ödeme İsteği",
+                            "Ödeme isteği geldi",
+                            icon_path="custom.ico",
+                            duration=2
+                            )
+        flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak')
+        return redirect('/')
+    except:
+        flash("bir problemle karşılaştık eğer sorun devam ederse kasadan ödeme yapabilirsiniz")
+        return redirect('/')
 @views.route('/removecart')
 @login_required
 def remove_cart():
@@ -122,7 +145,6 @@ def remove_cart():
         
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
-        db.session.add(cart_item)
         db.session.delete(cart_item)
         db.session.commit()
 
@@ -136,7 +158,7 @@ def remove_cart():
         data = {
             'quantity': cart_item.quantity,
             'amount': amount,
-            'total': amount + 200
+            'total': amount 
         }
 
         return jsonify(data)
@@ -161,6 +183,7 @@ def place_order():
                 new_order.quantity = item.quantity
                 new_order.price = item.product.current_price
                 new_order.status = 'Beklemede'
+                new_order.Payment = 'Ödeme Yapılmadı'
 
                 new_order.product_link = item.product_link
                 new_order.customer_link = item.customer_link
@@ -178,7 +201,8 @@ def place_order():
                 toaster = ToastNotifier()
                 toaster.show_toast("Sipariş Var",
                                    "Masa 10 sipariş verdi",
-                                   icon_path="custom.ico"
+                                   icon_path="custom.ico",
+                                   duration=2
                                    )
 
 

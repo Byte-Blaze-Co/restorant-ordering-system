@@ -10,7 +10,7 @@
         <tr>
 
             <th scope="col">Sipariş numarası</th>
-            <th scope="col">Ödeme Numarası</th>
+            <th scope="col">Ödeme </th>
 
             <th scope="col">Masa No</th>
             <th scope="col">Müşteri mail</th>
@@ -33,7 +33,7 @@
 
         <tr>
             <td>{{ order.id }}</td>
-            <td>{{ order.payment_id }}</td>
+            <td>{{ order.Payment }}</td>
 
             <td>{{ order.customer.username }}</td>
             <td>{{ order.customer.email }}</td>
@@ -47,7 +47,7 @@
             <td>{{ order.status}}</td>
 
             <td>
-                <a href="/update-order/{{ order.id }}">Sipariş Durumunu Güncelle</a>
+                <a href="/update-order/{{ order.id }}">Güncelle</a>
             </td>
             <td>
                 <a href="/remove-order/{{ order.id }}">Siparişi Sil</a>
