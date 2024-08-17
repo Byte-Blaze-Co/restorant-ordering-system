@@ -45,10 +45,10 @@ def add_to_cart(item_id):
     try:
         db.session.add(new_cart_item)
         db.session.commit()
-        flash(f'{new_cart_item.product.product_name} added to cart')
+        flash(f'{new_cart_item.product.product_name} Sepete Eklendi')
     except Exception as e:
         print('Item not added to cart', e)
-        flash(f'{new_cart_item.product.product_name} has not been added to cart')
+        flash(f'{new_cart_item.product.product_name} Sepete Eklenirken bir sorun oluştu')
 
     return redirect(request.referrer)
 
@@ -61,7 +61,7 @@ def show_cart():
     for item in cart:
         amount += item.product.current_price * item.quantity
 
-    return render_template('cart.html', cart=cart, amount=amount, total=amount+200)
+    return render_template('cart.html', cart=cart, amount=amount, total=amount + 15)
 
 
 @views.route('/pluscart')
@@ -118,31 +118,32 @@ def minus_cart():
             return jsonify(data)
 
 
-@views.route('/payment/<int:order_id>', methods=['GET', 'POST'])
+@views.route('payment')
 @login_required
-def paymentrequest(order_id):
-    order = Order.query.get(order_id)
-    order.Payment = 'Ödeme İsteği Alındı'
-    try:
-        db.session.commit()
-        from win10toast import ToastNotifier
-        toaster = ToastNotifier()
-        toaster.show_toast("Ödeme İsteği",
-                            "Ödeme isteği geldi",
-                            icon_path="custom.ico",
-                            duration=2
-                            )
-        flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak')
-        return redirect('/')
-    except:
-        flash("bir problemle karşılaştık eğer sorun devam ederse kasadan ödeme yapabilirsiniz")
-        return redirect('/')
-@views.route('/removecart')
+def paymentrequest():
+    if request.method == 'GET':
+        order_id = request.args.get('order_id')
+        order = Order.query.get(order_id)
+        order.Payment = 'Ödeme İsteği Alındı'
+        try:
+            db.session.commit()
+            from win10toast import ToastNotifier
+            toaster = ToastNotifier()
+            toaster.show_toast("Ödeme İsteği",
+                                "Ödeme isteği geldi",
+                                icon_path="custom.ico",
+                                duration=2
+                                )
+            flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak')
+            return redirect('/')
+        except:
+            flash("bir problemle karşılaştık eğer sorun devam ederse kasadan ödeme yapabilirsiniz")
+            return redirect('/')
+    
+@views.route('removecart')
 @login_required
 def remove_cart():
     if request.method == 'GET':
-        global cart_item
-        
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
         db.session.delete(cart_item)
@@ -158,10 +159,10 @@ def remove_cart():
         data = {
             'quantity': cart_item.quantity,
             'amount': amount,
-            'total': amount 
+            'total': amount
         }
 
-        return jsonify(data)
+        return [jsonify(data)]
 
 
 @views.route('/place-order')
