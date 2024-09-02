@@ -54,9 +54,11 @@
                                     <div class="progress-bar bg-danger" role="progressbar" style="width: 100%;"  aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
                                 </div>
                                 {% endif %}
-                                <div class="col-sm-4">
-                                    <a href="" class="make-payment btn btn-sm btn-secondary  " style="margin-right: -200px; color: rgb(255, 255, 255); background-color: green;" pid="{{order.id}}">Ödeme Yap</a>
-                                </div>
+                                {% for order in orders %}
+                                    <div class="col-sm-4">
+                                        <a href="" class="make-payment btn btn-sm btn-secondary  " style="margin-right: -200px; color: rgb(255, 255, 255); background-color: green;" pid="{{order.id}}">Ödeme Yap</a>
+                                    </div>
+                                {% endfor %}    
                             </div>
                             
                         </div>

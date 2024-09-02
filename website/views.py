@@ -5,6 +5,7 @@ from . import db
 from intasend import APIService
 
 
+
 views = Blueprint('views', __name__)
 
 API_PUBLISHABLE_KEY = 'YOUR_PUBLISHABLE_KEY'
@@ -219,7 +220,7 @@ def place_order():
         return redirect('/')
 
 
-@views.route('/orders')
+@views.route('/orders', methods=['GET', 'POST'])
 @login_required
 def order():
     orders = Order.query.filter_by(customer_link=current_user.id).all()
