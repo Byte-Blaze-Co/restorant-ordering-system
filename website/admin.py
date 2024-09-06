@@ -186,9 +186,9 @@ def addnewtable():
     new_customer.password = 'Masa'+str(tablecount)
     new_customer.MasaNo = tablecount
     import qrcode
-    img = qrcode.make('https://192.168.1.101/masa'+str(tablecount))
+    img = qrcode.make('http://192.168.1.108/masa'+str(tablecount))
     type(img)  # qrcode.image.pil.PilImage
-    imgname="QR Kodlar/masa "+str(tablecount)+".png"
+    imgname="QR/masa "+str(tablecount)+".png"
     img.save(imgname)
     tablecount= tablecount+1
     print(tablecount)
