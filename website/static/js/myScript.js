@@ -70,3 +70,18 @@ $('.remove-cart').click(function(){
 
 
 })
+
+$('.make-payment').click(function(){
+    
+    var id = $(this).attr('pid').toString()
+
+    $.ajax({
+        type: 'GET',
+        url: '/payment',
+        data: {
+            order_id: id
+        }
+    })
+
+
+})

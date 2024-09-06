@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, flash, redirect, request, jsonify
-from .models import Product, Cart, Order
+from .models import Product, Cart, Order, Customer
 from flask_login import login_required, current_user
 from . import db
 from intasend import APIService
@@ -126,20 +126,16 @@ def paymentrequest():
         order_id = request.args.get('order_id')
         order = Order.query.get(order_id)
         order.Payment = 'Ödeme İsteği Alındı'
-        try:
-            db.session.commit()
-            from win10toast import ToastNotifier
-            toaster = ToastNotifier()
-            toaster.show_toast("Ödeme İsteği",
-                                "Ödeme isteği geldi",
-                                icon_path="custom.ico",
-                                duration=2
-                                )
-            flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak')
-            return redirect('/')
-        except:
-            flash("bir problemle karşılaştık eğer sorun devam ederse kasadan ödeme yapabilirsiniz")
-            return redirect('/')
+        db.session.commit()
+        from win10toast import ToastNotifier
+        toaster = ToastNotifier()
+        toaster.show_toast("Ödeme İsteği",
+                            "Ödeme isteği geldi",
+                            icon_path="custom.ico",
+                            duration=2
+                            )
+        flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak')
+        return redirect('/')
     
 @views.route('removecart')
 @login_required
@@ -170,7 +166,6 @@ def remove_cart():
 @login_required
 def place_order():
     from win10toast import ToastNotifier
-
     customer_cart = Cart.query.filter_by(customer_link=current_user.id)
     if customer_cart:
         
