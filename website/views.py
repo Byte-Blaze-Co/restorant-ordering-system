@@ -194,18 +194,22 @@ def place_order():
                 new_order.customer_link = item.customer_link
 
                 db.session.add(new_order)
-
+                
                 product = Product.query.get(item.product_link)
 
                 product.in_stock -= item.quantity
 
                 db.session.delete(item)
-
+                bildirim_numarası=current_user.id
+                print(bildirim_numarası)
+                bildirim_numarası=bildirim_numarası-6
+                print(bildirim_numarası)
+                bildirim_numarası=str(bildirim_numarası)
                 db.session.commit()
                 from win10toast import ToastNotifier
                 toaster = ToastNotifier()
                 toaster.show_toast("Sipariş Var",
-                                   "Masa 10 sipariş verdi",
+                                   "Masa "+bildirim_numarası+" sipariş verdi",
                                    icon_path="custom.ico",
                                    duration=2
                                    )

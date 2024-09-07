@@ -24,7 +24,7 @@ def add_shop_items():
             product_name = form.product_name.data
             current_price = form.current_price.data
             previous_price = form.previous_price.data
-            in_stock = form.in_stock.data
+            in_stock = 9999
             flash_sale = form.flash_sale.data
             salad = form.salad.data
             hotdrink = form.hotdrink.data
@@ -91,7 +91,6 @@ def update_item(item_id):
         form.product_name.render_kw = {'placeholder': item_to_update.product_name}
         form.previous_price.render_kw = {'placeholder': item_to_update.previous_price}
         form.current_price.render_kw = {'placeholder': item_to_update.current_price}
-        form.in_stock.render_kw = {'placeholder': item_to_update.in_stock}
         form.flash_sale.render_kw = {'placeholder': item_to_update.flash_sale}
         form.sneak.render_kw = {'placeholder': item_to_update.sneak}
         form.main.render_kw = {'placeholder': item_to_update.main}
@@ -104,7 +103,7 @@ def update_item(item_id):
             product_name = form.product_name.data
             current_price = form.current_price.data
             previous_price = form.previous_price.data
-            in_stock = form.in_stock.data
+            in_stock = 9999
             flash_sale = form.flash_sale.data
             salad = form.salad.data
             hotdrink = form.hotdrink.data
