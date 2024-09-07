@@ -31,11 +31,11 @@ def add_to_cart(item_id):
         try:
             item_exists.quantity = item_exists.quantity + 1
             db.session.commit()
-            flash(f' Quantity of { item_exists.product.product_name } has been updated')
+            flash(f'{ item_exists.product.product_name } Ürününün Adisyonu Güncellendi 😄')
             return redirect(request.referrer)
         except Exception as e:
-            print('Quantity not Updated', e)
-            flash(f'Quantity of { item_exists.product.product_name } not updated')
+            print('Adisyon Güncellenemedi', e)
+            flash(f'{ item_exists.product.product_name } Ürününün Adisyonu Güncellenemedi 😥')
             return redirect(request.referrer)
 
     new_cart_item = Cart()
@@ -46,10 +46,10 @@ def add_to_cart(item_id):
     try:
         db.session.add(new_cart_item)
         db.session.commit()
-        flash(f'{new_cart_item.product.product_name} Sepete Eklendi')
+        flash(f'{new_cart_item.product.product_name} Sepete Eklendi 🥳')
     except Exception as e:
         print('Item not added to cart', e)
-        flash(f'{new_cart_item.product.product_name} Sepete Eklenirken bir sorun oluştu')
+        flash(f'{new_cart_item.product.product_name} Sepete Eklenirken bir sorun oluştu 😥')
 
     return redirect(request.referrer)
 
@@ -115,7 +115,7 @@ def minus_cart():
                    
                 return jsonify(data)
         else:
-            flash('daha fazla eksiltemezsiniz')
+            flash('daha fazla eksiltemezsiniz 🫤')
             return jsonify(data)
 
 
@@ -123,19 +123,27 @@ def minus_cart():
 @login_required
 def paymentrequest():
     if request.method == 'GET':
-        order_id = request.args.get('order_id')
-        order = Order.query.get(order_id)
-        order.Payment = 'Ödeme İsteği Alındı'
-        db.session.commit()
-        from win10toast import ToastNotifier
-        toaster = ToastNotifier()
-        toaster.show_toast("Ödeme İsteği",
-                            "Ödeme isteği geldi",
-                            icon_path="custom.ico",
-                            duration=2
-                            )
-        flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak')
-        return redirect('/')
+        try:
+            order_id = request.args.get('order_id')
+            payment_status = Order.query.get('Payment')
+            order = Order.query.get(order_id)
+            if payment_status == 'Ödeme İsteği Alındı' or 'Ödeme Yapıldı':
+                flash('Zaten Ödeme İsteği Gönderdiniz')
+                return redirect('/')
+            order.Payment = 'Ödeme İsteği Alındı'
+            db.session.commit()
+            from win10toast import ToastNotifier
+            toaster = ToastNotifier()
+            toaster.show_toast("Ödeme İsteği",
+                               "Ödeme isteği geldi",
+                                icon_path="custom.ico",
+                                duration=2
+                               )
+            flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak 😁')
+            return redirect('/')
+        except:
+            flash('Ödeme isteğiniz sistemsel bir hatadan dolayı başarısız oldu lütfen tekrar deneyiniz 😥')
+            return redirect('/')
     
 @views.route('removecart')
 @login_required
@@ -202,16 +210,16 @@ def place_order():
                                    duration=2
                                    )
 
+            try:
 
-            flash('Order Placed Successfully')
-
-            return redirect('/orders')
-       
-            print(e)
-            flash('Order not placed')
-            return redirect('/')
+                flash('Sipariş Başarıyla Oluşturuldu 🎉')
+                return redirect('/orders')
+            except:
+                print("hata kodu :orderERR101")
+                flash('Sipariş Oluşturulurken Bir Hata Meydana Geldi 😥')
+                return redirect('/')
     else:
-        flash('Your cart is Empty')
+        flash('Sepetiniz Boş 😑')
         return redirect('/')
 
 

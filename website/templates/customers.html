@@ -7,10 +7,9 @@
 <table class="table table-dark table-hover">
     <thead>
         <tr>
-            <th scope="col">Customer ID</th>
-            <th scope="col">Username</th>
-            <th scope="col">Email</th>
-            <th scope="col">Date Joined</th>
+            <th scope="col">ID</th>
+            <th scope="col">Hesap İsmi</th>
+            <th scope="col">Katıldığı Tarih</th>
             <th scope="col">Aksiyon</th>
 
         </tr>
@@ -21,8 +20,10 @@
         <tr>
         <td>{{ customer.id }}</td>
         <td>{{ customer.username }}</td>
-        <td>{{ customer.email }}</td>
         <td>{{ customer.date_joined }}</td>
+        <td>
+            <a href="/remove-user/{{ customer.id }}">Kullanıcıyı Sil</a>
+        </td>
         </tr>
         {% endfor %}
     </tbody>

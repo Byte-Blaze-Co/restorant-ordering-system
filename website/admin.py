@@ -59,7 +59,7 @@ def add_shop_items():
             try:
                 db.session.add(new_shop_item)
                 db.session.commit()
-                flash(f'{product_name} added Successfully')
+                flash(f'{product_name} ürünü başarıyla eklendi')
                 print('Product Added')
                 return render_template('add_shop_items.html', form=form)
             except Exception as e:
@@ -135,12 +135,12 @@ def update_item(item_id):
                                                                 product_picture=file_path))
 
                 db.session.commit()
-                flash(f'{product_name} updated Successfully')
-                print('Product Upadted')
+                flash(f'{product_name} Başarıyla Güncellendi')
+                print('Ürün Güncellendi')
                 return redirect('/shop-items')
             except Exception as e:
-                print('Product not Upated', e)
-                flash('Item Not Updated!!!')
+                print('Ürün Güncellenemedi Sorun devam ederse destek ile iletişime geçiniz', e)
+                flash('Ürün Güncellendi!!!')
 
         return render_template('update_item.html', form=form)
     return render_template('404.html')
@@ -154,11 +154,11 @@ def delete_item(item_id):
             item_to_delete = Product.query.get(item_id)
             db.session.delete(item_to_delete)
             db.session.commit()
-            flash('One Item deleted')
+            flash('Bir öğe silindi')
             return redirect('/shop-items')
         except Exception as e:
-            print('Item not deleted', e)
-            flash('Item not deleted!!')
+            print('öğe silinemedi', e)
+            flash('!!')
         return redirect('/shop-items')
 
     return render_template('404.html')
@@ -200,7 +200,7 @@ def addnewtable():
     try:
         db.session.add(new_customer)
         db.session.commit()
-        flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz!')
+        flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz 🫡')
         return redirect('/admin-page')
     except Exception as e:
         print(e)
@@ -215,6 +215,22 @@ def remove_order(order_id):
     db.session.commit()
     flash('sipariş başarıyla silindi')
     return redirect('/view-orders')
+
+@admin.route('/remove-user/<int:customer_id>', methods=['GET', 'POST'])
+@login_required
+def remove_user(customer_id):  
+    id = Customer.query.get(customer_id)
+    if customer_id == 6:
+        flash("admin hesabını silemezsiniz")
+        return redirect('/customers')
+    try:
+        db.session.delete(id)  
+        db.session.commit()
+        flash('Kullanıcı Başarıyla Silindi')
+        return redirect('/customers')
+    except:
+        flash('Kullanıcı Silinemedi Lütfen Geçerli Kullanıcının Sepetinin Boş Olduğuna ve Siparişlerinin Temizlendiğine Dikkat Edin.')
+        return redirect('/customers')
 
 @admin.route('/update-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required
@@ -232,11 +248,11 @@ def update_order(order_id):
 
             try:
                 db.session.commit()
-                flash(f'{order_id} Numaralı Sipariş Başarıyla Güncellendi')
+                flash(f'{order_id} Numaralı Sipariş Başarıyla Güncellendi 👍')
                 return redirect('/view-orders')
             except Exception as e:
                 print(e)
-                flash(f'{order_id} Numaralı Sipariş Güncellenemedi ')
+                flash(f'{order_id} Numaralı Sipariş Güncellenemedi 😥')
                 return redirect('/view-orders')
 
         return render_template('order_update.html', form=form)
