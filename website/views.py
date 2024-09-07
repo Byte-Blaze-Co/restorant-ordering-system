@@ -119,31 +119,34 @@ def minus_cart():
             return jsonify(data)
 
 
-@views.route('payment')
+@views.route('/payment')
 @login_required
 def paymentrequest():
-    if request.method == 'GET':
-        try:
-            order_id = request.args.get('order_id')
-            payment_status = Order.query.get('Payment')
-            order = Order.query.get(order_id)
-            if payment_status == 'Ödeme İsteği Alındı' or 'Ödeme Yapıldı':
-                flash('Zaten Ödeme İsteği Gönderdiniz')
-                return redirect('/')
-            order.Payment = 'Ödeme İsteği Alındı'
-            db.session.commit()
-            from win10toast import ToastNotifier
-            toaster = ToastNotifier()
-            toaster.show_toast("Ödeme İsteği",
-                               "Ödeme isteği geldi",
-                                icon_path="custom.ico",
-                                duration=2
-                               )
-            flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak 😁')
-            return redirect('/')
-        except:
-            flash('Ödeme isteğiniz sistemsel bir hatadan dolayı başarısız oldu lütfen tekrar deneyiniz 😥')
-            return redirect('/')
+    orders = Order.query.filter_by(customer_link=current_user.id).all()
+    
+        
+    for order in orders:
+        print('a')
+        order_id = request.args.get('order_id')
+        payment_status = Order.query.get('Payment')
+        order = order
+        order.Payment = 'Ödeme İsteği Alındı'
+        db.session.commit()
+
+    from plyer import notification
+    bildirim_numarası=current_user.id
+    print(bildirim_numarası)
+    bildirim_numarası=bildirim_numarası-6
+    print(bildirim_numarası)
+    bildirim_numarası=str(bildirim_numarası)
+    notification.notify(
+                    title='Bildirim Başlığı',
+                    message='Masa '+bildirim_numarası+' ödeme isteği gönderdi',
+                    app_name='Restorant Yönetimi',
+                    timeout=10  # Bildirimin ekranda ne kadar süre kalacağını belirler
+                    )
+    flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak 😁')
+    return redirect('/')
     
 @views.route('removecart')
 @login_required
@@ -206,13 +209,13 @@ def place_order():
                 print(bildirim_numarası)
                 bildirim_numarası=str(bildirim_numarası)
                 db.session.commit()
-                from win10toast import ToastNotifier
-                toaster = ToastNotifier()
-                toaster.show_toast("Sipariş Var",
-                                   "Masa "+bildirim_numarası+" sipariş verdi",
-                                   icon_path="custom.ico",
-                                   duration=2
-                                   )
+                from plyer import notification
+                notification.notify(
+                             title='Yeni Sipariş Var',
+                             message='Masa '+bildirim_numarası+' sipariş verdi',
+                             app_name='Restorant Yönetim',
+                             timeout=5  # Bildirimin ekranda ne kadar süre kalacağını belirler
+                              )
 
             try:
 
