@@ -158,7 +158,7 @@ def delete_item(item_id):
             return redirect('/shop-items')
         except Exception as e:
             print('öğe silinemedi', e)
-            flash('!!')
+            flash('öğe silinemedi muhtemelen ürün birinin sepetinde ekli veya siparişlerde bulunuyor bu siparişleri temizleyip bir daha deneyin')
         return redirect('/shop-items')
 
     return render_template('404.html')
