@@ -128,10 +128,14 @@ def paymentrequest():
         
     for order in orders:
         print('a')
-        order.Payment = Order.query.get('Payment')
-        print(order.Payment)
-        if order.Payment != 'Ödeme Yapıldı':
-            order_id = request.args.get('order_id')          
+        order_id = order.id  
+        # ID numarası 1 olan satırı sorgulama
+        order_stat = Order.query.get(order_id)
+        print(order_id)
+        print(order_stat.Payment)          
+        
+        if order_stat.Payment != 'Ödeme Yapıldı' and order_stat.Payment != 'Ödeme İsteği Alındı':
+
             order = order
             order.Payment = 'Ödeme İsteği Alındı'
             db.session.commit()
