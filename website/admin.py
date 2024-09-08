@@ -206,6 +206,16 @@ def addnewtable():
         flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
 
 
+@admin.route('/finish-order/<int:order_id>', methods=['GET', 'POST'])
+@login_required
+def finish_order(order_id):  
+    order = Order.query.get(order_id)
+    order.Visibility = Order.query.get('Visibility')
+    db.session.delete(order)  
+    db.session.commit()
+    flash('sipariş başarıyla Tamamlandı ve Tamamlanan kategorisine kaydedildi')
+    return redirect('/view-orders')
+
 @admin.route('/remove-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def remove_order(order_id):  

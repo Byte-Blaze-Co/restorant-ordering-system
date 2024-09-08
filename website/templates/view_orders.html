@@ -21,7 +21,9 @@
 
             <th scope="col">Resim</th>
             <th scope="col">Durum</th>
-            <th scope="col">Aksiyon</th>
+            <th scope="col">Güncelle</th>
+            <th scope="col">Tamamla</th>
+            <th scope="col">Sil</th>
 
 
         </tr>
@@ -48,6 +50,9 @@
 
             <td>
                 <a href="/update-order/{{ order.id }}">Güncelle</a>
+            </td>
+            <td>
+                <a href="/finish-order/{{ order.id }}">Siparişi Tamamla</a>
             </td>
             <td>
                 <a href="/remove-order/{{ order.id }}">Siparişi Sil</a>

@@ -128,9 +128,9 @@ def paymentrequest():
         
     for order in orders:
         print('a')
-        payment_status = Order.query.filter_by(customer_link=current_user.id)
-        print(payment_status)
-        if payment_status != 'Ödeme Yapıldı':
+        order.Payment = Order.query.get('Payment')
+        print(order.Payment)
+        if order.Payment != 'Ödeme Yapıldı':
             order_id = request.args.get('order_id')          
             order = order
             order.Payment = 'Ödeme İsteği Alındı'
@@ -145,7 +145,7 @@ def paymentrequest():
         print(bildirim_numarası)
         bildirim_numarası=str(bildirim_numarası)
         notification.notify(
-                        title='Bildirim Başlığı',
+                        title='Yeni Ödeme İsteği',
                         message='Masa '+bildirim_numarası+' ödeme isteği gönderdi',
                         app_name='Restorant Yönetimi',
                         timeout=10  # Bildirimin ekranda ne kadar süre kalacağını belirler
@@ -217,13 +217,13 @@ def place_order():
                 print(bildirim_numarası)
                 bildirim_numarası=str(bildirim_numarası)
                 db.session.commit()
-                from plyer import notification
-                notification.notify(
-                             title='Yeni Sipariş Var',
-                             message='Masa '+bildirim_numarası+' sipariş verdi',
-                             app_name='Restorant Yönetim',
-                             timeout=5  # Bildirimin ekranda ne kadar süre kalacağını belirler
-                              )
+            from plyer import notification
+            notification.notify(
+                            title='Yeni Sipariş Var',
+                            message='Masa '+bildirim_numarası+' sipariş verdi',
+                            app_name='Restorant Yönetim',
+                            timeout=5  # Bildirimin ekranda ne kadar süre kalacağını belirler
+                            )
 
             try:
 
