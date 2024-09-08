@@ -122,31 +122,39 @@ def minus_cart():
 @views.route('/payment')
 @login_required
 def paymentrequest():
+    degisiklik_sayisi=0
     orders = Order.query.filter_by(customer_link=current_user.id).all()
     
         
     for order in orders:
         print('a')
-        order_id = request.args.get('order_id')
-        payment_status = Order.query.get('Payment')
-        order = order
-        order.Payment = 'Ödeme İsteği Alındı'
-        db.session.commit()
+        payment_status = Order.query.filter_by(customer_link=current_user.id)
+        print(payment_status)
+        if payment_status != 'Ödeme Yapıldı':
+            order_id = request.args.get('order_id')          
+            order = order
+            order.Payment = 'Ödeme İsteği Alındı'
+            db.session.commit()
+            degisiklik_sayisi=degisiklik_sayisi+1
+    if degisiklik_sayisi >=1:
 
-    from plyer import notification
-    bildirim_numarası=current_user.id
-    print(bildirim_numarası)
-    bildirim_numarası=bildirim_numarası-6
-    print(bildirim_numarası)
-    bildirim_numarası=str(bildirim_numarası)
-    notification.notify(
-                    title='Bildirim Başlığı',
-                    message='Masa '+bildirim_numarası+' ödeme isteği gönderdi',
-                    app_name='Restorant Yönetimi',
-                    timeout=10  # Bildirimin ekranda ne kadar süre kalacağını belirler
-                    )
-    flash('Ödeme isteğiniz gönderildi garson birazdan yanınızda olacak 😁')
-    return redirect('/')
+        from plyer import notification
+        bildirim_numarası=current_user.id
+        print(bildirim_numarası)
+        bildirim_numarası=bildirim_numarası-6
+        print(bildirim_numarası)
+        bildirim_numarası=str(bildirim_numarası)
+        notification.notify(
+                        title='Bildirim Başlığı',
+                        message='Masa '+bildirim_numarası+' ödeme isteği gönderdi',
+                        app_name='Restorant Yönetimi',
+                        timeout=10  # Bildirimin ekranda ne kadar süre kalacağını belirler
+                        )
+        flash('Ödeme isteğiniz gönderildi/güncellendi garson birazdan yanınızda olacak 😁')
+        return redirect('/')
+    else:
+        flash("zaten ödeme isteği yapmışsınız ve değişiklik yok")
+        return redirect('/')
     
 @views.route('removecart')
 @login_required

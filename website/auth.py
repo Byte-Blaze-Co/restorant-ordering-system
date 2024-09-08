@@ -57,8 +57,12 @@ def sign_up():
 
 @auth.route('/masa<int:MasaNo>', methods=['GET'])
 def logintable(MasaNo):
-    MasaNo = Customer.query.filter_by(MasaNo=MasaNo).first()
-    print(MasaNo.MasaNo)
+    try:
+       MasaNo = Customer.query.filter_by(MasaNo=MasaNo).first()
+       print(MasaNo.MasaNo)
+    except:
+        flash('Girmek istediğiniz masa mevcut değil')
+        return render_template('404.html')
     Number = str(MasaNo.MasaNo)
     try:
 
