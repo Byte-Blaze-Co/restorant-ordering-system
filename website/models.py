@@ -45,6 +45,7 @@ class Product(db.Model):
     hotdrink = db.Column(db.Boolean, default=False)
     desert = db.Column(db.Boolean, default=False)
     sneak = db.Column(db.Boolean, default=False)
+    Solded = db.Column(db.Integer, default=0)
     
 
     carts = db.relationship('Cart', backref=db.backref('product', lazy=True))

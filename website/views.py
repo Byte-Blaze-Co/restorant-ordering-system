@@ -110,6 +110,7 @@ def minus_cart():
                    data = {
                        'quantity': cart_item.quantity,
                        'amount': amount,
+                       'Solded': item.quantity,
                        'total': amount + 15
                           }
                    
@@ -122,6 +123,9 @@ def minus_cart():
 @views.route('/payment')
 @login_required
 def paymentrequest():
+    customer_id = current_user.id
+    customer = Customer.query.get(customer_id)
+    name = customer.username
     degisiklik_sayisi=0
     orders = Order.query.filter_by(customer_link=current_user.id).all()
     
@@ -150,7 +154,7 @@ def paymentrequest():
         bildirim_numarası=str(bildirim_numarası)
         notification.notify(
                         title='Yeni Ödeme İsteği',
-                        message='Masa '+bildirim_numarası+' ödeme isteği gönderdi',
+                        message=name+' ödeme isteği gönderdi',
                         app_name='Restorant Yönetimi',
                         timeout=10  # Bildirimin ekranda ne kadar süre kalacağını belirler
                         )
@@ -178,6 +182,7 @@ def remove_cart():
 
         data = {
             'quantity': cart_item.quantity,
+            'Solded': item.quantity,
             'amount': amount,
             'total': amount
         }
@@ -188,8 +193,10 @@ def remove_cart():
 @views.route('/place-order')
 @login_required
 def place_order():
-    from win10toast import ToastNotifier
     customer_cart = Cart.query.filter_by(customer_link=current_user.id)
+    customer_id = current_user.id
+    customer = Customer.query.get(customer_id)
+    name = customer.username
     if customer_cart:
         
             total = 0
@@ -213,6 +220,7 @@ def place_order():
                 product = Product.query.get(item.product_link)
 
                 product.in_stock -= item.quantity
+                product.Solded = item.quantity
 
                 db.session.delete(item)
                 bildirim_numarası=current_user.id
@@ -224,7 +232,7 @@ def place_order():
             from plyer import notification
             notification.notify(
                             title='Yeni Sipariş Var',
-                            message='Masa '+bildirim_numarası+' sipariş verdi',
+                            message=name+' sipariş verdi',
                             app_name='Restorant Yönetim',
                             timeout=5  # Bildirimin ekranda ne kadar süre kalacağını belirler
                             )
@@ -252,7 +260,7 @@ def order():
 @views.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
-        search_query = request.form.get('search')
+        search_query = request.form.get('search').strip().lower()
         items = Product.query.filter(Product.product_name.ilike(f'%{search_query}%')).all()
         return render_template('search.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])

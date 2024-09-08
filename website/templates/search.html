@@ -12,6 +12,10 @@
 
 
 <div class="container text-center">
+    <form class="d-flex" role="search" action="/search" style="margin-left:11px; margin-right:10px; margin-top: 10px;" method="POST">
+        <input class="form-control me-2" name="search" type="search" placeholder="Ürün İsmi" aria-label="Search">
+        <button class="btn" type="submit">🔎</button>
+      </form>
     <div class="row" style="margin: 8px; background-color: rgb(219, 218, 218);" id="column">
 
         {% for item in items %}
@@ -39,7 +43,6 @@
             </div>
 
             <div class="row">
-                <p>{{ item.in_stock }} Tane Ürün Stokta</p>
             </div>
         </div>
     
