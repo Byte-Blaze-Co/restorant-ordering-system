@@ -4,11 +4,8 @@ from flask_login import LoginManager
 #import requests
 import pathlib
 from flask import Flask, session, abort, redirect, request
-from google.oauth2 import id_token
 import os
-from google_auth_oauthlib.flow import Flow
 from pip._vendor import cachecontrol
-import google.auth.transport.requests
 
 
 db = SQLAlchemy()
@@ -27,11 +24,6 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     GOOGLE_CLIENT_ID = "1087409452458-8asgv2ur8664id8te1uijrh523turdv4.apps.googleusercontent.com"
     client_secrets_file = os.path.join(pathlib.Path(__file__).parent, "client_secret.json")
-    flow = Flow.from_client_secrets_file(
-        client_secrets_file=client_secrets_file,
-        scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "openid"],
-        redirect_uri="http://localhost/callback"
-)
     db.init_app(app)
 
     @app.errorhandler(404)
