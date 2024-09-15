@@ -1,35 +1,147 @@
-{% extends 'forms.html' %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Girişi</title>
 
-{% block title %} Admin Girişi {% endblock %}
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 
-{% block body %}
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-<!-- Login section start -->
+    <style>
+        body {
+            background: linear-gradient(135deg, #0f2027, #203a4d, #2c5364);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            font-family: 'Roboto', sans-serif;
+            overflow: hidden;
+            animation: backgroundAnimation 15s ease infinite;
+        }
 
-<section class="base" id="base-signup">
-    <div class="base-content">
-        <div class="form">
-            <h3>
-                Admin Paneline Erişmek için <br> Giriş Yap
-            </h3>
-            
-            <hr class="first">
-            <form method="POST">
-                {{ form.hidden_tag() }}
+        @keyframes backgroundAnimation {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
 
-                <div class="email"><h4>E-Posta Adresi</h4>{{ form.email }} <hr></div>
-                <div class="password"><h4>Şifre</h4>{{ form.password }} <hr></div>
+        .login-container {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease-in-out;
+            backdrop-filter: blur(10px);
+        }
 
-                <div class="buttons">
-                    {{ form.submit() }}
-                    
-                </div>
+        h3 {
+            color: #00aaff;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            animation: slideIn 0.5s ease-in-out;
+        }
 
+        hr {
+            border: 1px solid #00aaff;
+            margin: 20px 0;
+        }
 
-            </form>
-        </div>
+        .form-control {
+            border: none;
+            border-bottom: 2px solid #00aaff;
+            border-radius: 0;
+            background: transparent;
+            color: #fff;
+            transition: border-color 0.3s;
+            padding: 10px 5px;
+            font-size: 16px;
+        }
+
+        .form-control:focus {
+            border-color: #00eaff;
+            box-shadow: none;
+        }
+
+        .btn-submit {
+            background-color: #00aaff;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            width: 100%;
+            transition: background-color 0.3s, transform 0.3s;
+            margin-top: 20px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .btn-submit:hover {
+            background-color: #00eaff;
+            transform: scale(1.05);
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .animated-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://source.unsplash.com/featured/?futuristic,technology') center/cover;
+            opacity: 0.2;
+            animation: pulse 10s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="animated-background"></div>
+    
+    <div class="login-container">
+        <h3>Admin Paneline Giriş Yap</h3>
+        <hr>
+        <form method="POST">
+            {{ form.hidden_tag() }}
+            <div class="mb-3">
+                <label for="email" class="form-label text-white">E-Posta Adresi</label>
+                {{ form.email(class="form-control", id="email") }}
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label text-white">Şifre</label>
+                {{ form.password(class="form-control", id="password") }}
+            </div>
+            <div class="buttons">
+                {{ form.submit(class="btn btn-submit") }}
+            </div>
+        </form>
     </div>
-</section>
 
-
-{% endblock %}
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,30 +1,233 @@
-{% extends 'base.html' %}
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sipariş Güncelle</title>
 
-{% block title %} Update Order {% endblock %}
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-{% block body %}
+    <!-- Custom CSS -->
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            overflow-x: hidden;
+        }
 
-<table class="table table-dark table-hover">
-    <thead>
-        <tr>
-            <th scope="col">Sipariş Durumu</th>
-            <th scope="col">Ödeme Durumu</th>
-            <th scope="col">Aksiyon</th>
-        </tr>
-    </thead>
+        /* Sidebar Styles */
+        .sidebar {
+            width: 80px;
+            height: 100vh;
+            background-color: #1a1a2e;
+            transition: width 0.3s ease;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
 
-    <tbody>
-        <tr>
+        .sidebar.expanded {
+            width: 250px;
+        }
+
+        .sidebar .logo {
+            padding: 20px;
+            color: #fff;
+            text-align: center;
+            font-size: 1.5rem;
+            background-color: #162447;
+            cursor: pointer;
+        }
+
+        .sidebar ul {
+            padding: 0;
+            list-style-type: none;
+        }
+
+        .sidebar ul li {
+            width: 100%;
+        }
+
+        .sidebar ul li a {
+            text-decoration: none;
+            color: #fff;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .sidebar ul li a i {
+            font-size: 1.5rem;
+            margin-right: 15px;
+        }
+
+        .sidebar ul li a:hover {
+            background-color: #0f3460;
+            transform: translateX(10px);
+        }
+
+        .sidebar ul li a span {
+            display: none;
+            transition: all 0.3s;
+        }
+
+        .sidebar.expanded ul li a span {
+            display: inline-block;
+            font-size: 1.1rem;
+        }
+
+        /* Main Content Styles */
+        .main-content {
+            margin-left: 80px;
+            padding: 30px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .main-content.expanded {
+            margin-left: 250px;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .form-container h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: #162447;
+        }
+
+        .form-container .btn {
+            background-color: #1f4068;
+            color: #fff;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+
+        .form-container .btn:hover {
+            background-color: #162447;
+        }
+
+        /* Responsive for Mobile */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 50px;
+            }
+
+            .sidebar.expanded {
+                width: 200px;
+            }
+
+            .main-content {
+                margin-left: 50px;
+            }
+
+            .main-content.expanded {
+                margin-left: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo" id="logo">BB</div>
+        <ul>
+            <li>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Ciro Analizi</span>
+                </a>
+            </li>
+            <li>
+                <a href="/shop-items" class="nav-link">
+                    <i class="fas fa-box"></i>
+                    <span>Satıştaki Ürünler</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>Çalışan Yönetimi</span>
+                </a>
+            </li>
+            <li>
+                <a href="#" class="nav-link">
+                    <i class="fas fa-cog"></i>
+                    <span>Ayarlar</span>
+                </a>
+            </li>
+            <li>
+                <a href="/add-shop-items" class="nav-link">
+                    <i class="fas fa-plus"></i>
+                    <span>Ürün Ekle</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <h1>Sipariş Güncelle</h1>
+
+        <!-- Update Order Form -->
+        <div class="form-container">
+            <h3>Sipariş Durumu ve Ödeme Durumu Güncelle</h3>
             <form action="" method="POST" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
 
-                <td>{{ form.order_status }}</td>
-                <td>{{ form.order_Payment }}</td>
-                <td>{{ form.update() }}</td>
-            </form>
-        </tr>
-    </tbody>
-</table>
+                <div class="form-group">
+                    <label for="order_status">Sipariş Durumu</label>
+                    {{ form.order_status(class_='form-control') }}
+                </div>
 
-{% endblock %}
+                <div class="form-group">
+                    <label for="order_Payment">Ödeme Durumu</label>
+                    {{ form.order_Payment(class_='form-control') }}
+                </div>
+
+                <button type="submit" class="btn btn-primary">Güncelle</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toggle Sidebar Script -->
+    <script>
+        const sidebar = document.getElementById('sidebar');
+        const mainContent = document.getElementById('main-content');
+        const logo = document.getElementById('logo');
+
+        logo.addEventListener('click', () => {
+            sidebar.classList.toggle('expanded');
+            mainContent.classList.toggle('expanded');
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

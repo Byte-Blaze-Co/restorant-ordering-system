@@ -126,6 +126,19 @@
                 margin-left: 200px;
             }
         }
+                /* Table Styles */
+                .table {
+            margin-top: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .table thead th {
+            background-color: #1a1a2e;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -189,7 +202,7 @@
         </div>
         {% endfor %}
         <h1>Ürünler Listesi</h1>
-        <div class="table-container">
+        <div class="table-responsive">
             {% if items | length < 1 %}
             <h3 style="color: black;">No Shop Items </h3>
             {% else %}

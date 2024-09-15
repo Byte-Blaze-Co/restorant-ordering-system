@@ -18,50 +18,100 @@
     <title>Garden | {% block title %} {% endblock %}</title>
 
     <style>
-        .nav-link {
-            font-size: 12px;
-            padding: 0;
-            margin: 0 10px;
+        body {
+            background-color: rgb(24, 129, 1);
+            animation: fadeIn 1.5s; /* Sayfa açılırken animasyon */
         }
 
-        .nav-item a {
-            text-align: center;
-            display: block;
-            padding: 5px;
-        }
-
-        /* Responsive styling */
-        @media (max-width: 992px) {
-            .nav-link {
-                margin: 0;
-                font-size: 14px;
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
+            to {
+                opacity: 1;
+            }
+        }
 
+        .navbar {
+            background-color: #fff;
+            animation: slideIn 0.5s; /* Navbar açılırken animasyon */
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        #items {
+            display: flex;
+            align-items: center;
+            margin-left: auto; /* Butonları sağa kaydırmak için */
+        }
+
+        .nav-link {
+            color: black; /* Yazı rengi */
+            transition: color 0.3s; /* Renk geçişi */
+        }
+
+        .nav-item {
+            margin: 0 10px; /* İtemler arasındaki boşluk */
+        }
+
+        /* Düğmelere hover animasyonu ekleme */
+        .nav-link:hover {
+            color: rgb(65, 234, 9); /* Hover rengi */
+            transform: scale(1.1); /* Hover sırasında büyüme */
+            animation: bounce 0.5s; /* Hover sırasında sıçrama animasyonu */
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Footer için animasyon */
+        footer {
+            animation: slideUp 0.5s; /* Footer açılırken animasyon */
+        }
+
+        @keyframes slideUp {
+            from {
+                transform: translateY(100%);
+            }
+            to {
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobil görünüm için özel stiller */
+        @media (max-width: 768px) {
             #items {
-                display: flex;
+                flex-direction: row; /* Butonları yan yana hizala */
                 justify-content: flex-end; /* Butonları sağa hizala */
                 gap: 15px; /* Aralarındaki boşluk */
-                align-items: center;
-                flex-direction: row; /* Yan yana durmalarını sağlar */
-                margin-left: auto; /* Solda boşluk olmaması için */
             }
-        }
 
-        @media (min-width: 992px) {
-            #items {
-                margin-left: auto;
-                margin-right: 0;
+            .nav-item {
+                margin: 0; /* Mobilde boşlukları kaldır */
             }
         }
     </style>
 </head>
-<body style="background-color: rgb(24, 129, 1);">
+<body>
 
     <!-- Navbar Section -->
-    <nav class="navbar navbar-expand-lg" style="background-color: #fff;">
+    <nav class="navbar navbar-expand-lg">
         <div class="container-fluid">
             <a class="navbar-brand" href="/" style="font-family: cursive; font-size: 35px;">Bilgin Garden</a>
-            
+
             <!-- Navbar Toggle (for small screens) -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -80,8 +130,8 @@
             </div>
 
             <!-- Cart and Orders (Always visible) -->
-            <ul class="navbar-nav ml-auto mb-2 mb-lg-0" id="items">
-                <li class="nav-item mx-2">
+            <ul class="navbar-nav" id="items">
+                <li class="nav-item">
                     <a class="nav-link text-grey" href="/cart">
                         {% if cart | length < 1 %}
                         Sepetim <i class="fa-solid fa-cart-shopping"></i>
@@ -90,7 +140,7 @@
                         {% endif %}
                     </a>
                 </li>
-                <li class="nav-item mx-2">
+                <li class="nav-item">
                     <a class="nav-link text-grey" href="/orders">Siparişlerim 🧺</a>
                 </li>
             </ul>
