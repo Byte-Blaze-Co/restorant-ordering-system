@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,9 +19,12 @@
     <title>Garden | {% block title %} {% endblock %}</title>
 
     <style>
+        /* Genel Sayfa Stilleri */
         body {
             background-color: rgb(24, 129, 1);
-            animation: fadeIn 1.5s; /* Sayfa açılırken animasyon */
+            padding: 0;
+            margin: 0;
+            animation: fadeIn 1.5s;
         }
 
         @keyframes fadeIn {
@@ -34,7 +38,7 @@
 
         .navbar {
             background-color: #fff;
-            animation: slideIn 0.5s; /* Navbar açılırken animasyon */
+            animation: slideIn 0.5s;
         }
 
         @keyframes slideIn {
@@ -49,27 +53,27 @@
         #items {
             display: flex;
             align-items: center;
-            margin-left: auto; /* Butonları sağa kaydırmak için */
+            margin-left: auto;
         }
 
         .nav-link {
-            color: black; /* Yazı rengi */
-            transition: color 0.3s; /* Renk geçişi */
+            color: black;
+            transition: color 0.3s;
         }
 
         .nav-item {
-            margin: 0 10px; /* İtemler arasındaki boşluk */
+            margin: 0 10px;
         }
 
-        /* Düğmelere hover animasyonu ekleme */
         .nav-link:hover {
-            color: rgb(65, 234, 9); /* Hover rengi */
-            transform: scale(1.1); /* Hover sırasında büyüme */
-            animation: bounce 0.5s; /* Hover sırasında sıçrama animasyonu */
+            color: rgb(65, 234, 9);
+            transform: scale(1.1);
+            animation: bounce 0.5s;
         }
 
         @keyframes bounce {
-            0%, 100% {
+            0%,
+            100% {
                 transform: translateY(0);
             }
             50% {
@@ -77,9 +81,8 @@
             }
         }
 
-        /* Footer için animasyon */
         footer {
-            animation: slideUp 0.5s; /* Footer açılırken animasyon */
+            animation: slideUp 0.5s;
         }
 
         @keyframes slideUp {
@@ -91,20 +94,28 @@
             }
         }
 
-        /* Mobil görünüm için özel stiller */
+        /* Tüm marginleri sıfırlamak için */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Mobil için özel düzenlemeler */
         @media (max-width: 768px) {
             #items {
-                flex-direction: row; /* Butonları yan yana hizala */
-                justify-content: flex-end; /* Butonları sağa hizala */
-                gap: 15px; /* Aralarındaki boşluk */
+                flex-direction: row;
+                justify-content: flex-end;
+                gap: 15px;
             }
 
             .nav-item {
-                margin: 0; /* Mobilde boşlukları kaldır */
+                margin: 0;
             }
         }
     </style>
 </head>
+
 <body>
 
     <!-- Navbar Section -->
@@ -171,4 +182,5 @@
     <script src="{{ url_for('static', filename='js/myScript.js') }}"></script>
 
 </body>
+
 </html>

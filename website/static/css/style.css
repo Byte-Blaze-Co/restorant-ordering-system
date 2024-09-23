@@ -36,7 +36,7 @@
     background-color: rgb(201, 132, 5);
 }
 #column :hover{
-    transform: scale(0.9);
+    transform: scale(0.95);
     transition: 450ms;
     border-radius: 10px;
 }

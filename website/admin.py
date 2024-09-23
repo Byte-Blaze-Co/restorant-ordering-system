@@ -80,6 +80,19 @@ def shop_items():
     return render_template('404.html')
 
 
+@admin.route('/employee-management')
+@login_required
+def test1():
+    flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
+    return redirect('/admin-page')
+
+@admin.route('/dashboard')
+@login_required
+def test():
+    flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
+    return redirect('/admin-page')
+
+
 @admin.route('/update-item/<int:item_id>', methods=['GET', 'POST'])
 @login_required
 def update_item(item_id):

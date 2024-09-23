@@ -250,6 +250,7 @@ def place_order():
         return redirect('/')
 
 
+
 @views.route('/orders', methods=['GET', 'POST'])
 @login_required
 def order():
