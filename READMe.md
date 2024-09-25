@@ -1,2 +1,2 @@
-Flask Ecommerce Restaurant ordering system V1
+EasyQR 1.0
 
