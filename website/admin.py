@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, send_from_directory, redirect
 from flask_login import login_required, current_user
-from .forms import ShopItemsForm, OrderForm
+from .forms import ShopItemsForm, OrderForm, PasswordChangeForm
 from werkzeug.utils import secure_filename
 from .models import Product, Order, Customer
 from . import db
@@ -91,6 +91,35 @@ def test1():
 def test():
     flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
     return redirect('/admin-page')
+
+@admin.route('/settings')
+@login_required
+def profile():
+    customer = Customer.query.get(6)
+    return render_template('settings.html', customer=customer)
+
+@admin.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = PasswordChangeForm()
+    customer = Customer.query.get(6)
+    if form.validate_on_submit():
+        current_password = form.current_password.data
+        new_password = form.new_password.data
+        confirm_new_password = form.confirm_new_password.data
+
+        if customer.verify_password(current_password):
+            if new_password == confirm_new_password:
+                customer.password = confirm_new_password
+                db.session.commit()
+                flash('Password Updated Successfully')
+                return redirect(f'/settings')
+            else:
+                flash('New Passwords do not match!!')
+
+        else:
+            flash('Current Password is Incorrect')
+    return render_template('password.html', form=form)
 
 
 @admin.route('/update-item/<int:item_id>', methods=['GET', 'POST'])
