@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İlk Başlangıç Ayarları</title>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f4f7fc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .setup-container {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 700px;
+            padding: 30px;
+        }
+
+        .setup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .setup-header h1 {
+            font-size: 2rem;
+            color: #1a1a2e;
+        }
+
+        .setup-header p {
+            font-size: 1rem;
+            color: #495057;
+        }
+
+        .step {
+            display: none;
+        }
+
+        .step.active {
+            display: block;
+        }
+
+        .form-group label {
+            font-weight: 600;
+        }
+
+        .step-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+
+        .step-buttons .btn {
+            width: 48%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="setup-container">
+    <div class="setup-header">
+        <h1>Hoş Geldiniz!</h1>
+        <p>Sisteminizi kurmak için birkaç adım tamamlamanız gerekiyor.</p>
+    </div>
+
+    <!-- Setup Steps -->
+    <form id="setup-form">
+        <!-- Kullanıcı Şifresi -->
+        <div class="step active">
+            <div class="form-group">
+                <label for="password">Yönetici Şifresi</label>
+                <input type="password" class="form-control" id="password" placeholder="Yönetici şifresini girin" required>
+            </div>
+        </div>
+
+        <!-- İlk Masaları Ekleme -->
+        <div class="step">
+            <div class="form-group">
+                <label for="tables">İlk Masalar</label>
+                <textarea class="form-control" id="tables" rows="3" placeholder="Masaları virgülle ayırarak girin (Örn: Masa 1, Masa 2)" required></textarea>
+            </div>
+        </div>
+
+        <!-- İlk Ürünleri Ekleme -->
+        <div class="step">
+            <div class="form-group">
+                <label for="products">İlk Ürünler</label>
+                <textarea class="form-control" id="products" rows="3" placeholder="Ürünleri virgülle ayırarak girin (Örn: Çay, Kahve)" required></textarea>
+            </div>
+        </div>
+
+        <!-- Lisans Anahtarı -->
+        <div class="step">
+            <div class="form-group">
+                <label for="license">Lisans Anahtarı</label>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    id="license" 
+                    placeholder="XXXX-XXXX-XXXX-XXXX" 
+                    maxlength="19" 
+                    required
+                >
+                <small class="form-text text-muted">Lisans anahtarı 16 karakterli olmalıdır. (Örn: ABCD-EFGH-IJKL-MNOP)</small>
+            </div>
+        </div>
+
+        <script>
+            const licenseInput = document.getElementById('license');
+
+            licenseInput.addEventListener('input', (event) => {
+                // Mevcut giriş değeri
+                let value = event.target.value.replace(/-/g, ''); // Tüm "-" işaretlerini temizle
+
+                // Her 4 karakterden sonra "-" ekle
+                if (value.length > 4) {
+                    value = value.match(/.{1,4}/g).join('-'); // Her 4 karakterde bir "-" ekle
+                }
+
+                // Değeri güncelle
+                event.target.value = value;
+            });
+
+            licenseInput.addEventListener('keypress', (event) => {
+                const key = event.key;
+                const isNumberOrLetter = /^[a-zA-Z0-9]$/.test(key); // Sadece harf ve rakam izin ver
+                const isDash = key === '-';
+
+                // Harf, rakam ve "-" dışında hiçbir şeyi kabul etme
+                if (!isNumberOrLetter && !isDash) {
+                    event.preventDefault();
+                }
+            });
+        </script>
+
+
+        <!-- Adım Düğmeleri -->
+        <div class="step-buttons">
+            <button type="button" class="btn btn-secondary" id="prev-btn" disabled>Geri</button>
+            <button type="button" class="btn btn-primary" id="next-btn">İleri</button>
+            <button type="submit" class="btn btn-success d-none" id="finish-btn">Tamamla</button>
+        </div>
+    </form>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<!-- Custom JS -->
+<script>
+    const steps = document.querySelectorAll('.step');
+    const nextBtn = document.getElementById('next-btn');
+    const prevBtn = document.getElementById('prev-btn');
+    const finishBtn = document.getElementById('finish-btn');
+    let currentStep = 0;
+
+    function updateStep() {
+        steps.forEach((step, index) => {
+            step.classList.toggle('active', index === currentStep);
+        });
+
+        prevBtn.disabled = currentStep === 0;
+        nextBtn.classList.toggle('d-none', currentStep === steps.length - 1);
+        finishBtn.classList.toggle('d-none', currentStep !== steps.length - 1);
+    }
+
+    nextBtn.addEventListener('click', () => {
+        if (currentStep < steps.length - 1) {
+            currentStep++;
+            updateStep();
+        }
+    });
+
+    prevBtn.addEventListener('click', () => {
+        if (currentStep > 0) {
+            currentStep--;
+            updateStep();
+        }
+    });
+
+    document.getElementById('setup-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        alert('Kurulum Tamamlandı!');
+        // Burada gerekli verileri kaydedebilir veya başka işlemler yapabilirsiniz
+    });
+
+    updateStep();
+</script>
+</body>
+</html>

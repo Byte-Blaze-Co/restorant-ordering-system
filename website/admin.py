@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, flash, send_from_directory, redirect
 from flask_login import login_required, current_user
-from .forms import ShopItemsForm, OrderForm, PasswordChangeForm
+from .forms import ShopItemsForm, OrderForm, PasswordChangeForm, NewTableForm
 from werkzeug.utils import secure_filename
 from .models import Product, Order, Customer
 from . import db
@@ -85,12 +85,14 @@ def shop_items():
 def test1():
     flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
     return redirect('/admin-page')
-
+@admin.route("/hello")
+@login_required
+def Hello():
+    return render_template("startup.html")
 @admin.route('/dashboard')
 @login_required
 def test():
-    flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
-    return redirect('/admin-page')
+    return render_template('dashboard.html')
 
 @admin.route('/settings')
 @login_required
@@ -112,13 +114,13 @@ def change_password():
             if new_password == confirm_new_password:
                 customer.password = confirm_new_password
                 db.session.commit()
-                flash('Password Updated Successfully')
+                flash('Şifreniz Başarıyla Değiştirildi')
                 return redirect(f'/settings')
             else:
-                flash('New Passwords do not match!!')
+                flash('Yeni Şifreniz Doğrulanamadı')
 
         else:
-            flash('Current Password is Incorrect')
+            flash('Şuanki şifrenizi yanlış girdiniz')
     return render_template('password.html', form=form)
 
 
@@ -215,37 +217,39 @@ def order_view():
 
 
 
-@admin.route('/addnewtable')
+@admin.route('/addnewtable', methods=['GET', 'POST'])
 @login_required
 def addnewtable():
-    file = open("tablecount.bin", "rb").read()
-    tablecount = int(file)
-    print(tablecount)
-    new_customer = Customer()
-    new_customer.email = 'masa'+str(tablecount)+'@gmail.com'
-    new_customer.username = 'Masa '+str(tablecount)
-    new_customer.password = 'Masa'+str(tablecount)
-    new_customer.MasaNo = tablecount
-    import qrcode
-    img = qrcode.make('http://192.168.1.141/masa'+str(tablecount))
-    type(img)  # qrcode.image.pil.PilImage
-    imgname="QR/masa "+str(tablecount)+".png"
-    img.save(imgname)
-    tablecount= tablecount+1
-    print(tablecount)
-    tablecount=bytes(str(tablecount), encoding="utf-8")
-    with open("tablecount.bin", "wb") as file:
-        file.write(tablecount)
-        print(tablecount)
-    file.close()
-    try:
-        db.session.add(new_customer)
-        db.session.commit()
-        flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz 🫡')
-        return redirect('/admin-page')
-    except Exception as e:
-        print(e)
-        flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
+    form=NewTableForm()
+    if form.validate_on_submit():
+
+        table_name = form.table_name.data
+        table_no = form.table_no.data
+        existing_customer = Customer.query.filter_by(MasaNo=int(table_no)).first()
+        
+        if existing_customer:
+            flash('Bu masa numarası zaten kullanılıyor, lütfen başka bir numara deneyin.')
+            return redirect('/addnewtable')
+        new_customer = Customer()
+        new_customer.email = 'masa'+str(table_name)+'@gmail.com'
+        new_customer.username = str(table_name)
+        new_customer.password = 'Masa'+str(table_no)
+        new_customer.MasaNo = int(table_no)
+        new_customer.MasaAdi = str(table_name)
+        import qrcode
+        img = qrcode.make('http://192.168.1.141/masa'+str(table_no))
+        type(img)  # qrcode.image.pil.PilImage
+        imgname="QR/masa "+str(table_no)+".png"
+        img.save(imgname)
+        try:
+            db.session.add(new_customer)
+            db.session.commit()
+            flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz 🫡')
+            return redirect('/admin-page')
+        except Exception as e:
+            print(e)
+            flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
+    return render_template('newtable.html', form=form)
 
 
 @admin.route('/finish-order/<int:order_id>', methods=['GET', 'POST'])

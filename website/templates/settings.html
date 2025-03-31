@@ -139,7 +139,7 @@
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
-        <div class="logo" id="logo">BB</div>
+        <div class="logo" id="logo">☰</div>
         <ul>
             <li>
                 <a href="/dashboard" class="nav-link">
@@ -183,6 +183,13 @@
 
     <!-- Main Content -->
     <div class="main-content" id="main-content">
+        <!-- Flash messages section -->
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
         <h1>Ayarlar</h1>
         <div class="settings-container">
             <h3>Admin Bilgileri</h3>

@@ -81,10 +81,10 @@ def login():
                 login_user(customer)
                 return redirect('/admin-page')
             else:
-                flash('Incorrect Email or Password')
+                flash('Yanlış E-posta veya şifre')
 
         else:
-            flash('Account does not exist please Sign Up')
+            flash('hesap bulunamadı lütfen doğru hesabı girdiğinizden emin olun')
 
     return render_template('login.html', form=form)
 
@@ -119,13 +119,13 @@ def change_password(customer_id):
             if new_password == confirm_new_password:
                 customer.password = confirm_new_password
                 db.session.commit()
-                flash('Password Updated Successfully')
+                flash('Şifre Başarıyla Değiştirildi')
                 return redirect(f'/profile/{customer.id}')
             else:
-                flash('New Passwords do not match!!')
+                flash('Şifreler Eşleşmiyor')
 
         else:
-            flash('Current Password is Incorrect')
+            flash('şuanki şifrenizi yanlış girdiniz')
 
     return render_template('change_password.html', form=form)
 

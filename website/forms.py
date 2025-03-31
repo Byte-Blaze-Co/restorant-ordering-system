@@ -24,6 +24,12 @@ class PasswordChangeForm(FlaskForm):
     confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), length(min=6)])
     change_password = SubmitField('Şifreyi Değiştir')
 
+class NewTableForm(FlaskForm):
+    table_no = IntegerField('Masa Numarası', validators=[DataRequired()])
+    table_name = StringField('Masa Adı', validators=[DataRequired(), length(min=2)])
+    create_table = SubmitField('Masayı Ekle')
+
+
 
 class ShopItemsForm(FlaskForm):
     product_name = StringField('Ürünün İsmi', validators=[DataRequired()])
