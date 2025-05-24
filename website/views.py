@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, request, jsonify
+from flask import Blueprint, render_template, flash, redirect, request, jsonify, url_for
 from .models import Product, Cart, Order, Customer
 from flask_login import login_required, current_user
 from . import db
@@ -13,13 +13,7 @@ API_PUBLISHABLE_KEY = 'YOUR_PUBLISHABLE_KEY'
 API_TOKEN = 'YOUR_API_TOKEN'
 
 
-@views.route('/')
-def home():
 
-    items = Product.query.filter_by(flash_sale=True)
-
-    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
-                           if current_user.is_authenticated else [])
 
 
 @views.route('/add-to-cart/<int:item_id>')
@@ -164,6 +158,34 @@ def paymentrequest():
         flash("zaten ödeme isteği yapmışsınız ve değişiklik yok")
         return redirect('/')
     
+# Örnek ürün listesi
+urunler = ["Pizza", "Pasta", "Patates", "Pilav", "Pide", "Pırasa", "Portakal", "Poğaça"]
+
+@views.route("/autocomplete")
+def autocomplete():
+    page = request.args.get('page', '')
+    page = page[1:]
+    print(page)
+    if page == "main" or " ":
+        search_item = Product.query.all()
+        names = [item.product_name for item in search_item]
+    elif page == "discount":
+        page="flash_sale"
+        search_item = Product.query.filter(getattr(Product, page) == True).all()
+        names = [item.product_name for item in search_item]
+
+    else:
+        search_item = Product.query.filter(getattr(Product, page) == True).all()
+        names = [item.product_name for item in search_item]
+        #search_name = [search_item.product_name for item in search_item]
+    #print(search_name)
+    #all_items = Product.query.all()
+    #all_names = [item.product_name for item in all_items]
+    #print(all_names)
+    query = request.args.get("query", "").lower()
+    results = [u for u in names if u.lower().startswith(query)]
+    return jsonify(results[:5])  # Maksimum 5 öneri
+    
 @views.route('removecart')
 @login_required
 def remove_cart():
@@ -261,49 +283,64 @@ def order():
 @views.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'POST':
-        search_query = request.form.get('search').strip().lower()
+        search_query = request.form.get('search').strip()
+        search_query = search_query.capitalize()
         items = Product.query.filter(Product.product_name.ilike(f'%{search_query}%')).all()
         return render_template('search.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
     return render_template('search.html')
-@views.route('/deserts')
+@views.route('/desert')
 def deserts():
     items = Product.query.filter_by(desert=True)
     return render_template('deserts.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
-@views.route("/mainmenu")
+@views.route("/main")
 def mainmenu():
     items = Product.query.filter_by(main=True)
     return render_template('mainmenu.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
-@views.route("/sneaks")
+@views.route("/sneak")
 def sneaks():
     items = Product.query.filter_by(sneak=True)
     print(items)
     return render_template('sneaks.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
-@views.route("/hotdrinks")
+@views.route("/hotdrink")
 def hotdrinks():
     items = Product.query.filter_by(hotdrink=True)
     return render_template('hotdrinks.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
-@views.route("/colddrinks")
+@views.route("/colddrink")
 def colddrinks():
     items = Product.query.filter_by(colddrink=True)
     return render_template('colddrinks.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
-@views.route("/salads")
+@views.route("/salad")
 def salads():
     items = Product.query.filter_by(salad=True)
     return render_template('salads.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
                            if current_user.is_authenticated else [])
 
+
+
+@views.route('/')
+def home():
+
+    items = Product.query.all()
+
+    return render_template('home.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
+@views.route('/discount')
+def discount():
+    items = Product.query.filter_by(flash_sale=True)
+    return render_template('discount.html', items=items, cart=Cart.query.filter_by(customer_link=current_user.id).all()
+                           if current_user.is_authenticated else [])
 
 
 

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayarlar - Admin Paneli</title>
+    <title>Parola Değiştir</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
@@ -22,7 +22,47 @@
             background-color: #f4f7fc;
             overflow-x: hidden;
         }
-        
+
+        /* Main Content Styles */
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .password-box {
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .password-box h3 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+            color: #162447;
+        }
+
+        .password-box .btn {
+            background-color: #1f4068;
+            color: white;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .password-box .btn:hover {
+            background-color: #162447;
+        }
+
+        .password-box label {
+            font-weight: 500;
+            color: #495057;
+        }
+
         /* Sidebar Styles */
         .sidebar {
             width: 80px;
@@ -88,68 +128,42 @@
             font-size: 1.1rem;
         }
 
-        /* Main Content Styles */
-        .main-content {
-            margin-left: 80px;
-            padding: 30px;
-            transition: margin-left 0.3s ease;
-        }
+        /* Responsive for Mobile */
+        @media (max-width: 768px) {
+            .password-box {
+                padding: 20px;
+                width: 90%;
+            }
 
-        .main-content.expanded {
-            margin-left: 250px;
-        }
+            .sidebar {
+                width: 50px;
+            }
 
-        /* Settings Page Styles */
-        .settings-container {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
+            .sidebar.expanded {
+                width: 200px;
+            }
 
-        .settings-container h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            color: #162447;
-        }
+            .main-content {
+                margin-left: 50px;
+            }
 
-        .settings-container p {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            color: #495057;
+            .main-content.expanded {
+                margin-left: 200px;
+            }
         }
-
-        .settings-container .btn-change-password {
-            background-color: #1f4068;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .settings-container .btn-change-password:hover {
-            background-color: #162447;
-        }
-
-        .settings-container .btn-change-domain {
-            background-color: #1f4068;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-        }
-
-        .settings-container .btn-change-domain:hover {
-            background-color: #162447;
-        }
-        
     </style>
 </head>
 <body>
+    <!-- Main Content -->
+    <div class="main-content" id="main-content">
+        <!-- Flash messages section -->
+        {% for message in get_flashed_messages() %}
+        <div class="alert alert-success alert-dismissible fade show flash-message" role="alert">
+            <strong>{{ message }}</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    <div>
 
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
@@ -168,7 +182,7 @@
                 </a>
             </li>
             <li>
-                <a href="/employee-management" class="nav-link">
+                <a href="#" class="nav-link">
                     <i class="fas fa-user"></i>
                     <span>Çalışan Yönetimi</span>
                 </a>
@@ -194,34 +208,26 @@
         </ul>
     </div>
 
-
     <!-- Main Content -->
-    <div class="main-content" id="main-content">
-        <!-- Flash messages section -->
-        {% for message in get_flashed_messages() %}
-        <div class="alert alert-success alert-dismissible fade show flash-message" role="alert">
-            <strong>{{ message }}</strong>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-        <h1>Ayarlar</h1>
-        <div class="settings-container">
-            <h3>Admin Bilgileri</h3>
-            <p><strong>Kullanıcı Adı:</strong> admin</p>
-            <p><strong>Şifre:</strong> *******</p>
-            <a href="/change-password" class="btn-change-password">Parolayı Değiştir</a>
-            <h3>    </h3>
-            <h3>    </h3>
-            <h3>   </h3>
-            <h3>Domain Ayarları</h3>
-            {% for setting in settings %}
-            <p><strong>Domain adı:</strong> {{setting.Domain}}</p>
-            <p><strong>LocalHost:</strong> {{setting.LocalHost}}</p>
-            {% endfor %}
-            <a href="/change-domain" class="btn-change-domain">Domain değiştir</a>
-            
-        </div>
+    <div class="container main-content" id="main-content">
+        <div class="password-box">
+            <h3>Domain ayarlarını değiştir</h3>
+            <form method="POST">
+                {{ form.hidden_tag() }}
 
+                <div class="mb-3">
+                    <label class="form-label">{{ form.domain.label }}</label>
+                    {{ form.domain(class="form-control") }}
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">{{ form.Localhost.label }}</label>
+                    {{ form.Localhost(class="form-control") }}
+                </div>
+
+                {{ form.change_domain(class="btn btn-primary w-100") }}
+            </form>
+        </div>
     </div>
 
     <!-- Toggle Sidebar Script -->
@@ -236,7 +242,7 @@
         });
     </script>
 
-    <!-- Bootstrap JS -->
+    <!-- Bootstrap Scripts -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

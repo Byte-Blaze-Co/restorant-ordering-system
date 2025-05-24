@@ -19,10 +19,15 @@ class LoginForm(FlaskForm):
 
 
 class PasswordChangeForm(FlaskForm):
-    current_password = PasswordField('Current Password', validators=[DataRequired(), length(min=6)])
-    new_password = PasswordField('New Password', validators=[DataRequired(), length(min=6)])
-    confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired(), length(min=6)])
+    current_password = PasswordField('Şuanki şifre', validators=[DataRequired(), length(min=6)])
+    new_password = PasswordField('Yeni şifre', validators=[DataRequired(), length(min=6)])
+    confirm_new_password = PasswordField('Yeni şifreyi doğrulayın', validators=[DataRequired(), length(min=6)])
     change_password = SubmitField('Şifreyi Değiştir')
+
+class DomainChangeForm(FlaskForm):
+    domain = StringField('Domain', validators=[DataRequired()])
+    Localhost = BooleanField('Localhost')
+    change_domain = SubmitField('Domain ayarlarını güncelle')
 
 class NewTableForm(FlaskForm):
     table_no = IntegerField('Masa Numarası', validators=[DataRequired()])

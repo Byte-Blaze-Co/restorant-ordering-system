@@ -84,6 +84,14 @@ class Order(db.Model):
     def __str__(self):
         return '<Order %r>' % self.id
 
+class Settings(db.Model):
+    Domain= db.Column(db.Text,primary_key=True)
+    LocalHost=db.Column(db.Boolean)
+
+    def __str__(self):
+        return '<Settings %r>' % self.Domain
+
+
 
 
 

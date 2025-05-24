@@ -1,8 +1,9 @@
 from flask import Blueprint, render_template, flash, send_from_directory, redirect
 from flask_login import login_required, current_user
-from .forms import ShopItemsForm, OrderForm, PasswordChangeForm, NewTableForm
+from .forms import ShopItemsForm, OrderForm, PasswordChangeForm, NewTableForm, DomainChangeForm
 from werkzeug.utils import secure_filename
-from .models import Product, Order, Customer
+from .models import Product, Order, Customer, Settings
+import qrcode
 from . import db
 
 
@@ -83,6 +84,8 @@ def shop_items():
 @admin.route('/employee-management')
 @login_required
 def test1():
+
+
     flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
     return redirect('/admin-page')
 @admin.route("/hello")
@@ -98,7 +101,24 @@ def test():
 @login_required
 def profile():
     customer = Customer.query.get(6)
-    return render_template('settings.html', customer=customer)
+    settings = Settings.query.all()
+    return render_template('settings.html', customer=customer, settings=settings)
+
+@admin.route('/change-domain', methods=['GET', 'POST'])
+@login_required
+def change_domain():
+    form = DomainChangeForm()
+    settings = Settings.query.first()
+    if form.validate_on_submit():
+        new_domain = form.domain.data
+        print(new_domain)
+        new_localhost = form.Localhost.data
+        settings.Domain=new_domain
+        settings.LocalHost=new_localhost
+        db.session.commit()
+        flash('Domain ayarlarınız başarıyla güncellendi')
+        return redirect(f'/settings')
+    return render_template('domain.html', form=form)
 
 @admin.route('/change-password', methods=['GET', 'POST'])
 @login_required
@@ -236,8 +256,9 @@ def addnewtable():
         new_customer.password = 'Masa'+str(table_no)
         new_customer.MasaNo = int(table_no)
         new_customer.MasaAdi = str(table_name)
-        import qrcode
-        img = qrcode.make('http://192.168.1.141/masa'+str(table_no))
+        settings = Settings.query.first()
+        
+        img = qrcode.make(f'{settings.Domain}/masa'+str(table_no))
         type(img)  # qrcode.image.pil.PilImage
         imgname="QR/masa "+str(table_no)+".png"
         img.save(imgname)

@@ -11,36 +11,40 @@
         <div class="list-group" id="right1">
 
             <a href="/" class="list-group-item list-group-item-action">
+                <i class="button" style="margin-left:-182px;"></i>                
+                <span class="link-name" >📖 Tüm ürünler</span>
+            </a>
+
+            <a href="/discount" class="list-group-item list-group-item-action">
                 <i class="button" style="margin-left:-137px;"></i>                
                 <span class="link-name" >💯🎉  İndirimli Ürünler</span>
             </a>
 
-            <a href="/deserts" class="list-group-item list-group-item-action">
+            <a href="/desert" class="list-group-item list-group-item-action">
                 <i class="button" style="margin-left:-240px;"></i>                
                 <span class="link-name" >🍩  Tatlı</span>
             </a>
-            <a href="/mainmenu" class="list-group-item list-group-item-action">
+            <a href="/main" class="list-group-item list-group-item-action">
                 <i class="button" style="margin-left:-190px;" aria-hidden="true"></i>
                 <span class="link-name">🍗 Ana yemek</span>
             </a>
-            <a href="/sneaks" class="list-group-item list-group-item-action">
+            <a href="/sneak" class="list-group-item list-group-item-action">
                 <i class="button" style="margin-left:-180px;" aria-hidden="true"></i>
                 <span class="button">🍟 Ara Sıcaklar</span>
             </a>
 
-            <a href="/colddrinks" class="list-group-item list-group-item-action">
+            <a href="/colddrink" class="list-group-item list-group-item-action">
                 <i class="button" style="margin-left:-155px;"></i>                
                 <span class="button">🍹 Soğuk İçecekler</span>
             </a>
-            <a href="/hotdrinks" class="list-group-item list-group-item-action">
+            <a href="/hotdrink" class="list-group-item list-group-item-action">
                 <i class="button"  style="margin-left:-160px;" aria-hidden="true"></i>
                 <span class="button">☕ Sıcak İçecekler</span>
             </a>
-            <a href="/salads" class="list-group-item list-group-item-action">
+            <a href="/salad" class="list-group-item list-group-item-action">
                 <i class="button" style="margin-left:-200px;" aria-hidden="true"></i>
                 <span class="button">🥗  Salatalar</span>
             </a>
-
         </div>
       </div>
       <div class="col-md-2">
@@ -74,11 +78,58 @@
  
     </div>
 </div>
+<form class="d-flex position-relative" role="search" action="/search" style="margin-left:20px; margin-right:20px;" method="POST">
+  <input 
+    class="form-control me-2" 
+    name="search" 
+    id="search-input"
+    type="search" 
+    placeholder="Ürün İsmi" 
+    aria-label="Search" 
+    autocomplete="off"
+  >
+  <button class="btn" type="submit">🔎</button>
 
-<form class="d-flex" role="search" action="/search" style="margin-left:20px; margin-right:20px;" method="POST">
-    <input class="form-control me-2" name="search" type="search" placeholder="Ürün İsmi" aria-label="Search">
-    <button class="btn" type="submit">🔎</button>
-  </form>
+  <ul id="suggestions" class="list-group position-absolute w-100" style="top:100%; z-index: 999;"></ul>
+</form>
+
+<script>
+  const input = document.getElementById('search-input');
+  const suggestionsBox = document.getElementById('suggestions');
+
+  input.addEventListener('input', async () => {
+    const query = input.value.trim();
+
+    if (query.length === 0) {
+      suggestionsBox.innerHTML = '';
+      return;
+    }
+    const currentPage = window.location.pathname;
+    const response = await fetch(`/autocomplete?query=${encodeURIComponent(query)}&page=${encodeURIComponent(currentPage)}`);
+
+    const suggestions = await response.json();
+
+    suggestionsBox.innerHTML = '';
+
+    suggestions.forEach(suggestion => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item list-group-item-action';
+      li.textContent = suggestion;
+      li.addEventListener('click', () => {
+        input.value = suggestion;
+        suggestionsBox.innerHTML = '';
+      });
+      suggestionsBox.appendChild(li);
+    });
+  });
+
+  // Tıklanınca kutuyu kapat
+  document.addEventListener('click', (e) => {
+    if (!suggestionsBox.contains(e.target) && e.target !== input) {
+      suggestionsBox.innerHTML = '';
+    }
+  });
+</script>
 <div class="container text-center">
     <div class="row" style="margin: 8px; border-radius: 10px; background-color: rgb(219, 219, 218);" id="column">
 

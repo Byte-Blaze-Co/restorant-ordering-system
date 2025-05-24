@@ -41,7 +41,7 @@ def create_app():
     from .views import views
     from .auth import auth
     from .admin import admin
-    from .models import Customer, Cart, Product, Order
+    from .models import Customer, Cart, Product, Order, Settings
 
     app.register_blueprint(views, url_prefix='/') # localhost:5000/about-us
     app.register_blueprint(auth, url_prefix='/') # localhost:5000/auth/change-password
