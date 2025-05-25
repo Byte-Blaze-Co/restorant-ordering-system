@@ -88,6 +88,7 @@
     aria-label="Search" 
     autocomplete="off"
   >
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
   <button class="btn" type="submit">🔎</button>
 
   <ul id="suggestions" class="list-group position-absolute w-100" style="top:100%; z-index: 999;"></ul>

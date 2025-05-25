@@ -12,10 +12,58 @@
 
 
 <div class="container text-center">
-    <form class="d-flex" role="search" action="/search" style="margin-left:11px; margin-right:10px; margin-top: 10px;" method="POST">
-        <input class="form-control me-2" name="search" type="search" placeholder="Ürün İsmi" aria-label="Search">
-        <button class="btn" type="submit">🔎</button>
-      </form>
+<form class="d-flex position-relative" role="search" action="/search" style="margin-left:20px; margin-right:20px; margin-top: 10px;" method="POST">
+  <input 
+    class="form-control me-2" 
+    name="search" 
+    id="search-input"
+    type="search" 
+    placeholder="Ürün İsmi" 
+    aria-label="Search" 
+    autocomplete="off"
+  >
+  <button class="btn" type="submit">🔎</button>
+
+  <ul id="suggestions" class="list-group position-absolute w-100" style="top:100%; z-index: 999;"></ul>
+</form>
+
+<script>
+  const input = document.getElementById('search-input');
+  const suggestionsBox = document.getElementById('suggestions');
+
+  input.addEventListener('input', async () => {
+    const query = input.value.trim();
+
+    if (query.length === 0) {
+      suggestionsBox.innerHTML = '';
+      return;
+    }
+    const currentPage = window.location.pathname;
+    const response = await fetch(`/autocomplete?query=${encodeURIComponent(query)}&page=${encodeURIComponent(currentPage)}`);
+
+    const suggestions = await response.json();
+
+    suggestionsBox.innerHTML = '';
+
+    suggestions.forEach(suggestion => {
+      const li = document.createElement('li');
+      li.className = 'list-group-item list-group-item-action';
+      li.textContent = suggestion;
+      li.addEventListener('click', () => {
+        input.value = suggestion;
+        suggestionsBox.innerHTML = '';
+      });
+      suggestionsBox.appendChild(li);
+    });
+  });
+
+  // Tıklanınca kutuyu kapat
+  document.addEventListener('click', (e) => {
+    if (!suggestionsBox.contains(e.target) && e.target !== input) {
+      suggestionsBox.innerHTML = '';
+    }
+  });
+</script>
     <div class="row" style="margin: 8px; background-color: rgb(219, 218, 218);" id="column">
 
         {% for item in items %}

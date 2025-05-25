@@ -12,8 +12,8 @@ admin = Blueprint('admin', __name__)
 
 @admin.route('/media/<path:filename>')
 def get_image(filename):
-    return send_from_directory('../media', filename)
-
+        return send_from_directory('../media', filename)
+    #return render_template('404.html')
 
 @admin.route('/add-shop-items', methods=['GET', 'POST'])
 @login_required
@@ -84,7 +84,13 @@ def shop_items():
 @admin.route('/employee-management')
 @login_required
 def test1():
-
+    settings_list = Settings.query.all()
+    for setting in settings_list:
+        db.session.delete(setting)
+        db.session.commit()
+    settings = Settings(Domain="example.com", LocalHost=True,businessname="Restorant İsmi")
+    db.session.add(settings)
+    db.session.commit()
 
     flash('maalesef görmek istediğiniz sayfa yapım aşamasında')
     return redirect('/admin-page')
@@ -100,48 +106,54 @@ def test():
 @admin.route('/settings')
 @login_required
 def profile():
-    customer = Customer.query.get(6)
-    settings = Settings.query.all()
-    return render_template('settings.html', customer=customer, settings=settings)
+    if current_user.id == 6:
+        customer = Customer.query.get(6)
+        settings = Settings.query.all()  
+        return render_template('settings.html', customer=customer, settings=settings)
+    return render_template('404.html')
 
 @admin.route('/change-domain', methods=['GET', 'POST'])
 @login_required
 def change_domain():
-    form = DomainChangeForm()
-    settings = Settings.query.first()
-    if form.validate_on_submit():
-        new_domain = form.domain.data
-        print(new_domain)
-        new_localhost = form.Localhost.data
-        settings.Domain=new_domain
-        settings.LocalHost=new_localhost
-        db.session.commit()
-        flash('Domain ayarlarınız başarıyla güncellendi')
-        return redirect(f'/settings')
-    return render_template('domain.html', form=form)
+    if current_user.id == 6:
+        form = DomainChangeForm()
+        settings = Settings.query.first()
+        if form.validate_on_submit():
+            new_domain = form.domain.data
+            print(new_domain)
+            new_localhost = form.Localhost.data
+            settings.Domain=new_domain
+            settings.LocalHost=new_localhost
+            db.session.commit()
+            flash('Domain ayarlarınız başarıyla güncellendi')
+            return redirect(f'/settings')
+        return render_template('domain.html', form=form)
+    return render_template('404.html')
 
 @admin.route('/change-password', methods=['GET', 'POST'])
 @login_required
 def change_password():
-    form = PasswordChangeForm()
-    customer = Customer.query.get(6)
-    if form.validate_on_submit():
-        current_password = form.current_password.data
-        new_password = form.new_password.data
-        confirm_new_password = form.confirm_new_password.data
+    if current_user.id == 6:
+        form = PasswordChangeForm()
+        customer = Customer.query.get(6)
+        if form.validate_on_submit():
+            current_password = form.current_password.data
+            new_password = form.new_password.data
+            confirm_new_password = form.confirm_new_password.data
 
-        if customer.verify_password(current_password):
-            if new_password == confirm_new_password:
-                customer.password = confirm_new_password
-                db.session.commit()
-                flash('Şifreniz Başarıyla Değiştirildi')
-                return redirect(f'/settings')
+            if customer.verify_password(current_password):
+                if new_password == confirm_new_password:
+                    customer.password = confirm_new_password
+                    db.session.commit()
+                    flash('Şifreniz Başarıyla Değiştirildi')
+                    return redirect(f'/settings')
+                else:
+                    flash('Yeni Şifreniz Doğrulanamadı')
+
             else:
-                flash('Yeni Şifreniz Doğrulanamadı')
-
-        else:
-            flash('Şuanki şifrenizi yanlış girdiniz')
-    return render_template('password.html', form=form)
+                flash('Şuanki şifrenizi yanlış girdiniz')
+        return render_template('password.html', form=form)
+    return render_template('404.html')
 
 
 @admin.route('/update-item/<int:item_id>', methods=['GET', 'POST'])
@@ -240,73 +252,80 @@ def order_view():
 @admin.route('/addnewtable', methods=['GET', 'POST'])
 @login_required
 def addnewtable():
-    form=NewTableForm()
-    if form.validate_on_submit():
+    if current_user.id == 6:
+        form=NewTableForm()
+        if form.validate_on_submit():
 
-        table_name = form.table_name.data
-        table_no = form.table_no.data
-        existing_customer = Customer.query.filter_by(MasaNo=int(table_no)).first()
-        
-        if existing_customer:
-            flash('Bu masa numarası zaten kullanılıyor, lütfen başka bir numara deneyin.')
-            return redirect('/addnewtable')
-        new_customer = Customer()
-        new_customer.email = 'masa'+str(table_name)+'@gmail.com'
-        new_customer.username = str(table_name)
-        new_customer.password = 'Masa'+str(table_no)
-        new_customer.MasaNo = int(table_no)
-        new_customer.MasaAdi = str(table_name)
-        settings = Settings.query.first()
-        
-        img = qrcode.make(f'{settings.Domain}/masa'+str(table_no))
-        type(img)  # qrcode.image.pil.PilImage
-        imgname="QR/masa "+str(table_no)+".png"
-        img.save(imgname)
-        try:
-            db.session.add(new_customer)
-            db.session.commit()
-            flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz 🫡')
-            return redirect('/admin-page')
-        except Exception as e:
-            print(e)
-            flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
-    return render_template('newtable.html', form=form)
+            table_name = form.table_name.data
+            table_no = form.table_no.data
+            existing_customer = Customer.query.filter_by(MasaNo=int(table_no)).first()
 
+            if existing_customer:
+                flash('Bu masa numarası zaten kullanılıyor, lütfen başka bir numara deneyin.')
+                return redirect('/addnewtable')
+            new_customer = Customer()
+            new_customer.email = 'masa'+str(table_name)+'@gmail.com'
+            new_customer.username = str(table_name)
+            new_customer.password = 'Masa'+str(table_no)
+            new_customer.MasaNo = int(table_no)
+            new_customer.MasaAdi = str(table_name)
+            settings = Settings.query.first()
+
+            img = qrcode.make(f'{settings.Domain}/masa'+str(table_no))
+            type(img)  # qrcode.image.pil.PilImage
+            imgname="QR/masa "+str(table_no)+".png"
+            img.save(imgname)
+            try:
+                db.session.add(new_customer)
+                db.session.commit()
+                flash('Masa Başarıyla Oluşturuldu QR kodu QR Kodlar klasöründe bulabilirsiniz 🫡')
+                return redirect('/admin-page')
+            except Exception as e:
+                print(e)
+                flash('Sistemde bir sorun oluştu Üretici ile irtibata geçiniz Hata Kodu: ERR101')
+        return render_template('newtable.html', form=form)
+    return render_template('404.html')
 
 @admin.route('/finish-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def finish_order(order_id):  
-    order = Order.query.get(order_id)
-    order.Visibility = Order.query.get('Visibility')
-    db.session.delete(order)  
-    db.session.commit()
-    flash('sipariş başarıyla Tamamlandı ve Tamamlanan kategorisine kaydedildi')
-    return redirect('/view-orders')
+    if current_user.id == 6:
+        order = Order.query.get(order_id)
+        order.Visibility = Order.query.get('Visibility')
+        db.session.delete(order)  
+        db.session.commit()
+        flash('sipariş başarıyla Tamamlandı ve Tamamlanan kategorisine kaydedildi')
+        return redirect('/view-orders')
+    return render_template('404.html')
 
 @admin.route('/remove-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required
 def remove_order(order_id):  
-    order = Order.query.get(order_id)
-    db.session.delete(order)  
-    db.session.commit()
-    flash('sipariş başarıyla silindi')
-    return redirect('/view-orders')
+    if current_user.id == 6:
+        order = Order.query.get(order_id)
+        db.session.delete(order)  
+        db.session.commit()
+        flash('sipariş başarıyla silindi')
+        return redirect('/view-orders')
+    return render_template('404.html')
 
 @admin.route('/remove-user/<int:customer_id>', methods=['GET', 'POST'])
 @login_required
 def remove_user(customer_id):  
-    id = Customer.query.get(customer_id)
-    if customer_id == 6:
-        flash("admin hesabını silemezsiniz")
-        return redirect('/customers')
-    try:
-        db.session.delete(id)  
-        db.session.commit()
-        flash('Kullanıcı Başarıyla Silindi')
-        return redirect('/customers')
-    except:
-        flash('Kullanıcı Silinemedi Lütfen Geçerli Kullanıcının Sepetinin Boş Olduğuna ve Siparişlerinin Temizlendiğine Dikkat Edin.')
-        return redirect('/customers')
+    if current_user.id == 6:
+        id = Customer.query.get(customer_id)
+        if customer_id == 6:
+            flash("admin hesabını silemezsiniz")
+            return redirect('/customers')
+        try:
+            db.session.delete(id)  
+            db.session.commit()
+            flash('Kullanıcı Başarıyla Silindi')
+            return redirect('/customers')
+        except:
+            flash('Kullanıcı Silinemedi Lütfen Geçerli Kullanıcının Sepetinin Boş Olduğuna ve Siparişlerinin Temizlendiğine Dikkat Edin.')
+            return redirect('/customers')
+    return render_template('404.html')
 
 @admin.route('/update-order/<int:order_id>', methods=['GET', 'POST'])
 @login_required

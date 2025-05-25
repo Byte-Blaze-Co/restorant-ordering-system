@@ -87,6 +87,7 @@ class Order(db.Model):
 class Settings(db.Model):
     Domain= db.Column(db.Text,primary_key=True)
     LocalHost=db.Column(db.Boolean)
+    businessname = db.Column(db.Text)
 
     def __str__(self):
         return '<Settings %r>' % self.Domain

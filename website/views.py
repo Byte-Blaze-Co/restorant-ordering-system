@@ -47,7 +47,6 @@ def add_to_cart(item_id):
 
     return redirect(request.referrer)
 
-
 @views.route('/cart')
 @login_required
 def show_cart():
@@ -162,6 +161,7 @@ def paymentrequest():
 urunler = ["Pizza", "Pasta", "Patates", "Pilav", "Pide", "Pırasa", "Portakal", "Poğaça"]
 
 @views.route("/autocomplete")
+
 def autocomplete():
     page = request.args.get('page', '')
     page = page[1:]
@@ -189,7 +189,6 @@ def autocomplete():
 @views.route('removecart')
 @login_required
 def remove_cart():
-    if request.method == 'GET':
         cart_id = request.args.get('cart_id')
         cart_item = Cart.query.get(cart_id)
         db.session.delete(cart_item)

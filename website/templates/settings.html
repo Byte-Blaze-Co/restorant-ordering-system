@@ -210,15 +210,18 @@
             <p><strong>Kullanıcı Adı:</strong> admin</p>
             <p><strong>Şifre:</strong> *******</p>
             <a href="/change-password" class="btn-change-password">Parolayı Değiştir</a>
-            <h3>    </h3>
-            <h3>    </h3>
-            <h3>   </h3>
+            <h3>------------------</h3>
             <h3>Domain Ayarları</h3>
             {% for setting in settings %}
-            <p><strong>Domain adı:</strong> {{setting.Domain}}</p>
+            <p><strong>Domain:</strong> {{setting.Domain}}</p>
             <p><strong>LocalHost:</strong> {{setting.LocalHost}}</p>
-            {% endfor %}
             <a href="/change-domain" class="btn-change-domain">Domain değiştir</a>
+            <h3>------------------</h3>
+            <h3>İsim Ayarları</h3>
+            <p><strong>İşletme Adı:</strong> {{setting.businessname}}</p>
+            <a href="/change-bussname" class="btn-change-name">Domain değiştir</a>
+            {% endfor %}
+            
             
         </div>
 

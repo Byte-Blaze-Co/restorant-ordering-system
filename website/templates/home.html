@@ -81,6 +81,7 @@
 </div>
 
 <form class="d-flex position-relative" role="search" action="/search" style="margin-left:20px; margin-right:20px;" method="POST">
+  
   <input 
     class="form-control me-2" 
     name="search" 
@@ -90,6 +91,7 @@
     aria-label="Search" 
     autocomplete="off"
   >
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
   <button class="btn" type="submit">🔎</button>
 
   <ul id="suggestions" class="list-group position-absolute w-100" style="top:100%; z-index: 999;"></ul>
@@ -150,7 +152,6 @@
                 <div class="col">
 
                     <h5 style="font-weight: 600; font-family: 'Times New Roman', Times, serif;">{{ item.current_price }} TL</h5>
-                    <strike><p style="color: gray;">{{ item.previous_price}} TL</p></strike>
                 </div>
 
                 <div class="col">
