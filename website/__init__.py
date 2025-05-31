@@ -3,6 +3,7 @@ from flask_wtf import FlaskForm
 from wtforms import StringField
 from flask_wtf.csrf import CSRFProtect
 import secrets
+
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 #import requests
@@ -10,9 +11,9 @@ import pathlib
 from flask import Flask, session, abort, redirect, request
 import os
 from pip._vendor import cachecontrol
-
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
+
 
 
 db = SQLAlchemy()
@@ -24,9 +25,12 @@ def create_database():
     print('Database Created')
 
 
+def validateLicenseKey():
+     print("a")
+
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = secrets.token_hex(32)
+    app.config['SECRET_KEY'] = "udfhçgkufyıvökçlı.hşp.gub.vkhcjdthxfndgtzhseajmswkmeıötgçloıdfykgctjkxhy"
     csrf = CSRFProtect(app)
     #limiter = Limiter(get_remote_address, app=app)
     os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1" # to allow Http traffic for local dev

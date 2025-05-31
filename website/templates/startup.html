@@ -2,203 +2,148 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>İlk Başlangıç Ayarları</title>
-
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
-
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Custom CSS -->
+    <title>Kurulum Sihirbazı</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #f4f7fc;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        .setup-container {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            width: 90%;
-            max-width: 700px;
-            padding: 30px;
-        }
-
-        .setup-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .setup-header h1 {
-            font-size: 2rem;
-            color: #1a1a2e;
-        }
-
-        .setup-header p {
-            font-size: 1rem;
-            color: #495057;
-        }
-
         .step {
             display: none;
         }
-
         .step.active {
             display: block;
         }
-
-        .form-group label {
-            font-weight: 600;
-        }
-
-        .step-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 20px;
-        }
-
-        .step-buttons .btn {
-            width: 48%;
-        }
     </style>
 </head>
-<body>
-
-<div class="setup-container">
-    <div class="setup-header">
-        <h1>Hoş Geldiniz!</h1>
-        <p>Sisteminizi kurmak için birkaç adım tamamlamanız gerekiyor.</p>
-    </div>
-
-    <!-- Setup Steps -->
-    <form id="setup-form">
-        <!-- Kullanıcı Şifresi -->
+<body class="bg-gray-100 h-screen flex items-center justify-center">
+    <form id="setupForm" class="w-full max-w-2xl bg-white p-10 rounded-2xl shadow-xl space-y-8" method="POST" action="/submit-setup" enctype="multipart/form-data">
+        
+        <!-- Adım 1: Dil Seçimi -->
         <div class="step active">
-            <div class="form-group">
-                <label for="password">Yönetici Şifresi</label>
-                <input type="password" class="form-control" id="password" placeholder="Yönetici şifresini girin" required>
-            </div>
+            <h2 class="text-2xl font-bold mb-4">1. Dil Seçimi</h2>
+            <label class="block mb-2 font-semibold">Sistem Dili:</label>
+            <select name="language" class="w-full border border-gray-300 rounded p-2" data-required>
+                <option value="">Bir dil seçin</option>
+                <option value="tr">Türkçe</option>
+                <option value="en">English</option>
+            </select>
         </div>
 
-        <!-- İlk Masaları Ekleme -->
+        <!-- Adım 2: Şirket Bilgileri -->
         <div class="step">
-            <div class="form-group">
-                <label for="tables">İlk Masalar</label>
-                <textarea class="form-control" id="tables" rows="3" placeholder="Masaları virgülle ayırarak girin (Örn: Masa 1, Masa 2)" required></textarea>
-            </div>
+            <h2 class="text-2xl font-bold mb-4">2. Şirket Bilgileri</h2>
+            <label class="block mb-2 font-semibold">Şirket Adı:</label>
+            <input name="company_name" type="text" class="w-full border border-gray-300 rounded p-2" data-required>
+            <label class="block mt-4 mb-2 font-semibold">Logo:</label>
+            <input name="logo" type="file" class="w-full border border-gray-300 rounded p-2">
         </div>
 
-        <!-- İlk Ürünleri Ekleme -->
+        <!-- Adım 3: Saat Dilimi -->
         <div class="step">
-            <div class="form-group">
-                <label for="products">İlk Ürünler</label>
-                <textarea class="form-control" id="products" rows="3" placeholder="Ürünleri virgülle ayırarak girin (Örn: Çay, Kahve)" required></textarea>
-            </div>
+            <h2 class="text-2xl font-bold mb-4">3. Saat Dilimi</h2>
+            <label class="block mb-2 font-semibold">Saat Dilimi:</label>
+            <select name="timezone" class="w-full border border-gray-300 rounded p-2" data-required>
+                <option value="">Bir saat dilimi seçin</option>
+                <option value="Europe/Istanbul">Europe/Istanbul</option>
+                <option value="UTC">UTC</option>
+                <option value="America/New_York">America/New_York</option>
+            </select>
         </div>
 
-        <!-- Lisans Anahtarı -->
+        <!-- Adım 4: Lisans Bilgileri -->
         <div class="step">
-            <div class="form-group">
-                <label for="license">Lisans Anahtarı</label>
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    id="license" 
-                    placeholder="XXXX-XXXX-XXXX-XXXX" 
-                    maxlength="19" 
-                    required
-                >
-                <small class="form-text text-muted">Lisans anahtarı 16 karakterli olmalıdır. (Örn: ABCD-EFGH-IJKL-MNOP)</small>
-            </div>
+            <h2 class="text-2xl font-bold mb-4">4. Lisans Anahtarı</h2>
+            <label class="block mb-2 font-semibold">Lisans Anahtarı:</label>
+            <input name="license_key" id="licenseInput" maxlength="29" placeholder="XXXX-XXXX-XXXX-XXXX-XXXX" class="w-full border border-gray-300 rounded p-2" data-required>
         </div>
 
-        <script>
-            const licenseInput = document.getElementById('license');
+        <!-- Adım 5: Sözleşmeler -->
+        <div class="step">
+            <h2 class="text-2xl font-bold mb-4">5. Sözleşmeler ve Onaylar</h2>
+            <label class="flex items-center space-x-2 mb-4">
+                <input type="checkbox" name="accept_terms" data-required>
+                <span>Kullanım koşullarını kabul ediyorum</span>
+            </label>
+            <label class="flex items-center space-x-2 mb-4">
+                <input type="checkbox" name="allow_usage_data">
+                <span>Deneyimlerime göre yazılımın geliştirilmesine katkı sağlayabilirim</span>
+            </label>
+            <label class="flex items-center space-x-2">
+                <input type="checkbox" name="auto_updates">
+                <span>Yazılım güncellemelerini otomatik al</span>
+            </label>
+        </div>
 
-            licenseInput.addEventListener('input', (event) => {
-                // Mevcut giriş değeri
-                let value = event.target.value.replace(/-/g, ''); // Tüm "-" işaretlerini temizle
-
-                // Her 4 karakterden sonra "-" ekle
-                if (value.length > 4) {
-                    value = value.match(/.{1,4}/g).join('-'); // Her 4 karakterde bir "-" ekle
-                }
-
-                // Değeri güncelle
-                event.target.value = value;
-            });
-
-            licenseInput.addEventListener('keypress', (event) => {
-                const key = event.key;
-                const isNumberOrLetter = /^[a-zA-Z0-9]$/.test(key); // Sadece harf ve rakam izin ver
-                const isDash = key === '-';
-
-                // Harf, rakam ve "-" dışında hiçbir şeyi kabul etme
-                if (!isNumberOrLetter && !isDash) {
-                    event.preventDefault();
-                }
-            });
-        </script>
-
-
-        <!-- Adım Düğmeleri -->
-        <div class="step-buttons">
-            <button type="button" class="btn btn-secondary" id="prev-btn" disabled>Geri</button>
-            <button type="button" class="btn btn-primary" id="next-btn">İleri</button>
-            <button type="submit" class="btn btn-success d-none" id="finish-btn">Tamamla</button>
+        <!-- Butonlar -->
+        <div class="flex justify-between">
+            <button type="button" id="prevBtn" class="bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded" disabled>Geri</button>
+            <button type="button" id="nextBtn" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">İleri</button>
+            <button type="submit" id="submitBtn" class="hidden bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">Tamamla</button>
         </div>
     </form>
-</div>
 
-<!-- Bootstrap JS -->
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const steps = document.querySelectorAll('.step');
+        let currentStep = 0;
 
-<!-- Custom JS -->
-<script>
-    const steps = document.querySelectorAll('.step');
-    const nextBtn = document.getElementById('next-btn');
-    const prevBtn = document.getElementById('prev-btn');
-    const finishBtn = document.getElementById('finish-btn');
-    let currentStep = 0;
+        function showStep(index) {
+            steps.forEach((step, i) => {
+                step.classList.toggle('active', i === index);
+            });
 
-    function updateStep() {
-        steps.forEach((step, index) => {
-            step.classList.toggle('active', index === currentStep);
+            document.getElementById('prevBtn').disabled = index === 0;
+            document.getElementById('nextBtn').classList.toggle('hidden', index === steps.length - 1);
+            document.getElementById('submitBtn').classList.toggle('hidden', index !== steps.length - 1);
+        }
+
+        function validateStep(stepIndex) {
+            const inputs = steps[stepIndex].querySelectorAll('[data-required]');
+            for (const input of inputs) {
+                if ((input.type === 'checkbox' && !input.checked) ||
+                    (input.type !== 'checkbox' && !input.value)) {
+                    alert('Lütfen gerekli alanları doldurun.');
+                    input.focus();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            if (validateStep(currentStep)) {
+                currentStep++;
+                showStep(currentStep);
+            }
         });
 
-        prevBtn.disabled = currentStep === 0;
-        nextBtn.classList.toggle('d-none', currentStep === steps.length - 1);
-        finishBtn.classList.toggle('d-none', currentStep !== steps.length - 1);
-    }
-
-    nextBtn.addEventListener('click', () => {
-        if (currentStep < steps.length - 1) {
-            currentStep++;
-            updateStep();
-        }
-    });
-
-    prevBtn.addEventListener('click', () => {
-        if (currentStep > 0) {
+        document.getElementById('prevBtn').addEventListener('click', () => {
             currentStep--;
-            updateStep();
-        }
-    });
+            showStep(currentStep);
+        });
 
-    document.getElementById('setup-form').addEventListener('submit', (e) => {
-        e.preventDefault();
-        alert('Kurulum Tamamlandı!');
-        // Burada gerekli verileri kaydedebilir veya başka işlemler yapabilirsiniz
-    });
+        // Lisans anahtarı formatlayıcı
+        const licenseInput = document.getElementById('licenseInput');
+        licenseInput.addEventListener('input', function () {
+            let value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+            let formatted = '';
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 5 === 0) formatted += '-';
+                formatted += value[i];
+            }
+            this.value = formatted;
+        });
 
-    updateStep();
-</script>
+        // Submit validasyon kontrolü
+        document.getElementById('setupForm').addEventListener('submit', function (e) {
+            for (let i = 0; i < steps.length; i++) {
+                if (!validateStep(i)) {
+                    e.preventDefault();
+                    currentStep = i;
+                    showStep(i);
+                    return;
+                }
+            }
+        });
+
+        showStep(currentStep);
+    </script>
 </body>
 </html>

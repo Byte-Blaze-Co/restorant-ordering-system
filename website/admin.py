@@ -88,7 +88,8 @@ def test1():
     for setting in settings_list:
         db.session.delete(setting)
         db.session.commit()
-    settings = Settings(Domain="example.com", LocalHost=True,businessname="Restorant İsmi")
+    license = "test_license"
+    settings = Settings(Domain="example.com", LocalHost=True,businessname="Restorant İsmi",licenseKey=license,Language=1,FirstBoot=False,AcceptedTerms=True,AutoUpdate=True,Telemetry=True)
     db.session.add(settings)
     db.session.commit()
 

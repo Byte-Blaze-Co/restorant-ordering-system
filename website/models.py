@@ -88,6 +88,14 @@ class Settings(db.Model):
     Domain= db.Column(db.Text,primary_key=True)
     LocalHost=db.Column(db.Boolean)
     businessname = db.Column(db.Text)
+    licenseKey = db.Column(db.Text)
+    Language = db.Column(db.Integer)
+    FirstBoot = db.Column(db.Boolean)
+    AcceptedTerms = db.Column(db.Boolean)
+    AutoUpdate = db.Column(db.Boolean)
+    Telemetry = db.Column(db.Boolean)
+
+
 
     def __str__(self):
         return '<Settings %r>' % self.Domain
